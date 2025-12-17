@@ -1048,8 +1048,11 @@
 
             const iframe = document.createElement('iframe');
             iframe.className = 'pdf-frame';
-            iframe.src = url;
+            // Use Google Docs Viewer for full PDF viewing with all pages
+            const viewerUrl = `https://docs.google.com/viewer?url=${encodeURIComponent(url)}&embedded=true`;
+            iframe.src = viewerUrl;
             iframe.title = type === 'QP' ? 'Question Paper' : 'Mark Scheme';
+            iframe.setAttribute('allowfullscreen', 'true');
 
             wrapper.appendChild(header);
             wrapper.appendChild(iframe);
