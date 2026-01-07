@@ -1161,6 +1161,1202 @@
                 viewerBadge.textContent = 'MS';
                 viewerBadge.className = 'viewer-title-badge ms';
                 viewerTitleText.textContent = `Mark Scheme - ${month} ${year}`;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edexcel IAL Past Papers</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #f8fafc;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #f1f5f9;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #94a3b8;
+            --accent: #6366f1;
+            --accent-light: #818cf8;
+            --accent-glow: rgba(99, 102, 241, 0.2);
+            --border: #e2e8f0;
+            --success: #10b981;
+            --mechanics: #f59e0b;
+            --pure: #6366f1;
+            --stats: #ec4899;
+            --physics: #3b82f6;
+            --chemistry: #10b981;
+            --legacy: #8b5cf6;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+        }
+
+        .dark {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --text-muted: #64748b;
+            --border: #334155;
+            --accent-glow: rgba(99, 102, 241, 0.3);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 24px 16px;
+        }
+
+        .container.viewer-open {
+            max-width: 100%;
+            padding: 16px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            box-shadow: var(--shadow);
+        }
+
+        h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent), var(--pure));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-top: 4px;
+        }
+
+        .card {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .card-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-title i {
+            font-size: 1rem;
+        }
+
+        /* Subject Grid */
+        .subject-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+        }
+
+        .subject-btn {
+            padding: 14px 12px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            background: var(--bg-tertiary);
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .subject-btn:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .subject-btn.active {
+            border-color: var(--accent);
+            background: var(--accent-glow);
+        }
+
+        .subject-btn .unit {
+            font-size: 1.25rem;
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+            margin-bottom: 4px;
+        }
+
+        .subject-btn .code {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .subject-btn[data-subject="Mechanics"] .unit { color: var(--mechanics); }
+        .subject-btn[data-subject="Pure"] .unit { color: var(--pure); }
+        .subject-btn[data-subject="Statistics"] .unit { color: var(--stats); }
+        .subject-btn[data-subject="Physics"] .unit { color: var(--physics); }
+        .subject-btn[data-subject="Chemistry"] .unit { color: var(--chemistry); }
+        .subject-btn[data-subject="ChemistryLegacy"] .unit { color: var(--legacy); }
+
+        .subject-btn.active[data-subject="Mechanics"] { border-color: var(--mechanics); background: rgba(245, 158, 11, 0.15); }
+        .subject-btn.active[data-subject="Pure"] { border-color: var(--pure); background: rgba(99, 102, 241, 0.15); }
+        .subject-btn.active[data-subject="Statistics"] { border-color: var(--stats); background: rgba(236, 72, 153, 0.15); }
+        .subject-btn.active[data-subject="Physics"] { border-color: var(--physics); background: rgba(59, 130, 246, 0.15); }
+        .subject-btn.active[data-subject="Chemistry"] { border-color: var(--chemistry); background: rgba(16, 185, 129, 0.15); }
+        .subject-btn.active[data-subject="ChemistryLegacy"] { border-color: var(--legacy); background: rgba(139, 92, 246, 0.15); }
+
+        .subject-btn.legacy {
+            border-style: dashed;
+        }
+
+        /* Selection Row */
+        .selection-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        @media (max-width: 500px) {
+            .selection-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .select-wrapper {
+            position: relative;
+        }
+
+        .select-wrapper label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .select-wrapper select {
+            width: 100%;
+            padding: 14px 16px;
+            font-size: 1rem;
+            font-family: 'DM Sans', sans-serif;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            cursor: pointer;
+            appearance: none;
+            transition: border-color 0.2s;
+        }
+
+        .select-wrapper select:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .select-wrapper::after {
+            content: '\f078';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            right: 16px;
+            bottom: 16px;
+            color: var(--text-muted);
+            pointer-events: none;
+            font-size: 0.75rem;
+        }
+
+        /* Results */
+        .results {
+            display: none;
+        }
+
+        .results.show {
+            display: block;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .result-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .result-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .result-badge.mechanics { background: rgba(245, 158, 11, 0.15); color: var(--mechanics); }
+        .result-badge.pure { background: rgba(99, 102, 241, 0.15); color: var(--pure); }
+        .result-badge.statistics { background: rgba(236, 72, 153, 0.15); color: var(--stats); }
+        .result-badge.physics { background: rgba(59, 130, 246, 0.15); color: var(--physics); }
+        .result-badge.chemistry { background: rgba(16, 185, 129, 0.15); color: var(--chemistry); }
+        .result-badge.chemistrylegacy { background: rgba(139, 92, 246, 0.15); color: var(--legacy); }
+
+        /* Paper Links Grid */
+        .paper-links {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        @media (max-width: 500px) {
+            .paper-links {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .paper-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            border-radius: 12px;
+            text-decoration: none;
+            transition: all 0.2s;
+            border: 2px solid var(--border);
+            background: var(--bg-tertiary);
+            cursor: pointer;
+        }
+
+        .paper-link:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .paper-link.qp {
+            border-color: var(--accent);
+        }
+
+        .paper-link.qp:hover {
+            background: var(--accent-glow);
+        }
+
+        .paper-link.ms {
+            border-color: var(--success);
+        }
+
+        .paper-link.ms:hover {
+            background: rgba(16, 185, 129, 0.15);
+        }
+
+        .paper-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .paper-link.qp .paper-icon {
+            background: var(--accent);
+            color: white;
+        }
+
+        .paper-link.ms .paper-icon {
+            background: var(--success);
+            color: white;
+        }
+
+        .paper-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .paper-type {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .paper-desc {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .paper-arrow {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* View Buttons */
+        .view-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+        }
+
+        @media (max-width: 600px) {
+            .view-buttons {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .view-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 16px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 600;
+            font-family: 'DM Sans', sans-serif;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .view-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: var(--accent-glow);
+        }
+
+        .view-btn i {
+            font-size: 1rem;
+        }
+
+        .view-btn.side-by-side {
+            grid-column: span 1;
+        }
+
+        @media (max-width: 600px) {
+            .view-btn.side-by-side {
+                grid-column: span 1;
+            }
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-muted);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        .empty-state p {
+            font-size: 0.95rem;
+        }
+
+        /* Quick Years */
+        .quick-years {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+        }
+
+        .quick-year-btn {
+            padding: 8px 14px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: transparent;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-family: 'JetBrains Mono', monospace;
+            transition: all 0.2s;
+        }
+
+        .quick-year-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .quick-year-btn.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: white;
+        }
+
+        /* PDF Viewer */
+        .pdf-viewer-section {
+            display: none;
+            margin-bottom: 20px;
+        }
+
+        .pdf-viewer-section.show {
+            display: block;
+            animation: slideUp 0.3s ease;
+        }
+
+        .viewer-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .viewer-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .viewer-title-badge {
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .viewer-title-badge.qp {
+            background: var(--accent);
+            color: white;
+        }
+
+        .viewer-title-badge.ms {
+            background: var(--success);
+            color: white;
+        }
+
+        .viewer-title-badge.both {
+            background: linear-gradient(135deg, var(--accent), var(--success));
+            color: white;
+        }
+
+        .viewer-controls {
+            display: flex;
+            gap: 8px;
+        }
+
+        .viewer-control-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 8px 14px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            font-weight: 500;
+            font-family: 'DM Sans', sans-serif;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .viewer-control-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .viewer-control-btn.close-btn:hover {
+            border-color: #ef4444;
+            color: #ef4444;
+        }
+
+        /* PDF Container */
+        .pdf-container {
+            display: flex;
+            gap: 16px;
+            height: 75vh;
+            min-height: 500px;
+        }
+
+        @media (max-width: 800px) {
+            .pdf-container.side-by-side {
+                flex-direction: column;
+                height: auto;
+            }
+
+            .pdf-container.side-by-side .pdf-frame-wrapper {
+                height: 50vh;
+                min-height: 400px;
+            }
+        }
+
+        .pdf-frame-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: var(--bg-tertiary);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid var(--border);
+        }
+
+        .pdf-frame-wrapper.qp {
+            border-color: var(--accent);
+        }
+
+        .pdf-frame-wrapper.ms {
+            border-color: var(--success);
+        }
+
+        .pdf-frame-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 14px;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .pdf-frame-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .pdf-frame-title i {
+            font-size: 1rem;
+        }
+
+        .pdf-frame-wrapper.qp .pdf-frame-title i {
+            color: var(--accent);
+        }
+
+        .pdf-frame-wrapper.ms .pdf-frame-title i {
+            color: var(--success);
+        }
+
+        .pdf-frame-download {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 10px;
+            border: none;
+            border-radius: 6px;
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .pdf-frame-download:hover {
+            background: var(--accent);
+            color: white;
+        }
+
+        .pdf-frame {
+            flex: 1;
+            width: 100%;
+            border: none;
+            background: #525659;
+        }
+
+        .pdf-loading {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            color: var(--text-muted);
+        }
+
+        .pdf-loading i {
+            font-size: 2.5rem;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+
+        footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Portal Button */
+        .portal-btn {
+            position: fixed;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            color: var(--text-muted);
+            text-decoration: none;
+            box-shadow: var(--shadow);
+            transition: all 0.2s;
+            z-index: 100;
+        }
+
+        .portal-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            transform: translateY(-50%) scale(1.05);
+        }
+
+        .portal-btn i {
+            font-size: 1.1rem;
+        }
+
+        @media (max-width: 600px) {
+            .portal-btn {
+                left: 8px;
+                width: 36px;
+                height: 36px;
+            }
+
+            .portal-btn i {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Portal Button -->
+    <a href="https://xenability.github.io/websites/" class="portal-btn" title="Back to Portal">
+        <i class="fas fa-home"></i>
+    </a>
+
+    <div class="container" id="mainContainer">
+        <header>
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <div>
+                    <h1>Edexcel IAL Papers</h1>
+                    <p class="subtitle">Quick access to past papers & mark schemes</p>
+                </div>
+            </div>
+        </header>
+
+        <div class="card">
+            <div class="card-title">
+                <i class="fas fa-book"></i>
+                Select Unit
+            </div>
+            <div class="subject-grid" id="subjectGrid">
+                <!-- Mechanics -->
+                <button class="subject-btn" data-subject="Mechanics" data-unit="M1" data-code="WME01">
+                    <div class="unit">M1</div>
+                    <div class="code">WME01</div>
+                </button>
+                <button class="subject-btn" data-subject="Mechanics" data-unit="M2" data-code="WME02">
+                    <div class="unit">M2</div>
+                    <div class="code">WME02</div>
+                </button>
+                <button class="subject-btn" data-subject="Mechanics" data-unit="M3" data-code="WME03">
+                    <div class="unit">M3</div>
+                    <div class="code">WME03</div>
+                </button>
+                <!-- Pure Maths -->
+                <button class="subject-btn" data-subject="Pure" data-unit="P1" data-code="WMA01">
+                    <div class="unit">P1</div>
+                    <div class="code">WMA01</div>
+                </button>
+                <button class="subject-btn" data-subject="Pure" data-unit="P2" data-code="WMA02">
+                    <div class="unit">P2</div>
+                    <div class="code">WMA02</div>
+                </button>
+                <button class="subject-btn" data-subject="Pure" data-unit="P3" data-code="WMA03">
+                    <div class="unit">P3</div>
+                    <div class="code">WMA03</div>
+                </button>
+                <button class="subject-btn" data-subject="Pure" data-unit="P4" data-code="WMA04">
+                    <div class="unit">P4</div>
+                    <div class="code">WMA04</div>
+                </button>
+                <!-- Statistics -->
+                <button class="subject-btn" data-subject="Statistics" data-unit="S1" data-code="WST01">
+                    <div class="unit">S1</div>
+                    <div class="code">WST01</div>
+                </button>
+                <button class="subject-btn" data-subject="Statistics" data-unit="S2" data-code="WST02">
+                    <div class="unit">S2</div>
+                    <div class="code">WST02</div>
+                </button>
+                <button class="subject-btn" data-subject="Statistics" data-unit="S3" data-code="WST03">
+                    <div class="unit">S3</div>
+                    <div class="code">WST03</div>
+                </button>
+                <!-- Physics -->
+                <button class="subject-btn" data-subject="Physics" data-unit="Unit-1" data-code="WPH11">
+                    <div class="unit">PHY1</div>
+                    <div class="code">WPH11</div>
+                </button>
+                <button class="subject-btn" data-subject="Physics" data-unit="Unit-2" data-code="WPH12">
+                    <div class="unit">PHY2</div>
+                    <div class="code">WPH12</div>
+                </button>
+                <button class="subject-btn" data-subject="Physics" data-unit="Unit-3" data-code="WPH13">
+                    <div class="unit">PHY3</div>
+                    <div class="code">WPH13</div>
+                </button>
+                <!-- Chemistry -->
+                <button class="subject-btn" data-subject="Chemistry" data-unit="Unit-1" data-code="WCH11">
+                    <div class="unit">CHE1</div>
+                    <div class="code">WCH11</div>
+                </button>
+                <button class="subject-btn" data-subject="Chemistry" data-unit="Unit-2" data-code="WCH12">
+                    <div class="unit">CHE2</div>
+                    <div class="code">WCH12</div>
+                </button>
+                <button class="subject-btn" data-subject="Chemistry" data-unit="Unit-3" data-code="WCH13">
+                    <div class="unit">CHE3</div>
+                    <div class="code">WCH13</div>
+                </button>
+                <!-- Chemistry Legacy -->
+                <button class="subject-btn legacy" data-subject="ChemistryLegacy" data-unit="Unit-1" data-unitnum="1" data-code="Legacy">
+                    <div class="unit">CHE1</div>
+                    <div class="code">Legacy</div>
+                </button>
+                <button class="subject-btn legacy" data-subject="ChemistryLegacy" data-unit="Unit-2" data-unitnum="2" data-code="Legacy">
+                    <div class="unit">CHE2</div>
+                    <div class="code">Legacy</div>
+                </button>
+                <button class="subject-btn legacy" data-subject="ChemistryLegacy" data-unit="Unit-3" data-unitnum="3" data-code="Legacy">
+                    <div class="unit">CHE3</div>
+                    <div class="code">Legacy</div>
+                </button>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">
+                <i class="fas fa-calendar"></i>
+                Select Session
+            </div>
+            <div class="selection-row">
+                <div class="select-wrapper">
+                    <label>Month</label>
+                    <select id="monthSelect">
+                        <option value="January">January</option>
+                        <option value="June" selected>June</option>
+                        <option value="October">October</option>
+                    </select>
+                </div>
+                <div class="select-wrapper">
+                    <label>Year</label>
+                    <select id="yearSelect">
+                        <!-- Populated by JS -->
+                    </select>
+                </div>
+            </div>
+            <div class="quick-years" id="quickYears">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+
+        <div class="card results" id="resultsCard">
+            <div class="result-header">
+                <span class="result-title" id="resultTitle">Question Paper & Mark Scheme</span>
+                <span class="result-badge" id="resultBadge"></span>
+            </div>
+            <div class="paper-links">
+                <a href="#" class="paper-link qp" id="qpLink" target="_blank">
+                    <div class="paper-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <div class="paper-info">
+                        <div class="paper-type">Question Paper</div>
+                        <div class="paper-desc">Download QP PDF</div>
+                    </div>
+                    <i class="fas fa-external-link-alt paper-arrow"></i>
+                </a>
+                <a href="#" class="paper-link ms" id="msLink" target="_blank">
+                    <div class="paper-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="paper-info">
+                        <div class="paper-type">Mark Scheme</div>
+                        <div class="paper-desc">Download MS PDF</div>
+                    </div>
+                    <i class="fas fa-external-link-alt paper-arrow"></i>
+                </a>
+            </div>
+            <div class="view-buttons">
+                <button class="view-btn" id="viewQpBtn">
+                    <i class="fas fa-eye"></i>
+                    View QP
+                </button>
+                <button class="view-btn" id="viewMsBtn">
+                    <i class="fas fa-eye"></i>
+                    View MS
+                </button>
+                <button class="view-btn side-by-side" id="viewBothBtn">
+                    <i class="fas fa-columns"></i>
+                    Side by Side
+                </button>
+            </div>
+        </div>
+
+        <!-- PDF Viewer Section -->
+        <div class="card pdf-viewer-section" id="pdfViewerSection">
+            <div class="viewer-header">
+                <div class="viewer-title">
+                    <span class="viewer-title-badge" id="viewerBadge">QP</span>
+                    <span id="viewerTitleText">Question Paper</span>
+                </div>
+                <div class="viewer-controls">
+                    <button class="viewer-control-btn close-btn" id="closeViewerBtn">
+                        <i class="fas fa-times"></i>
+                        Close
+                    </button>
+                </div>
+            </div>
+            <div class="pdf-container" id="pdfContainer">
+                <!-- PDF frames will be inserted here -->
+            </div>
+        </div>
+
+        <div class="card" id="emptyState">
+            <div class="empty-state">
+                <i class="fas fa-mouse-pointer"></i>
+                <p>Select a unit above to get started</p>
+            </div>
+        </div>
+
+        <footer>
+            Papers from <a href="https://www.physicsandmathstutor.com/" target="_blank">Physics & Maths Tutor</a>
+        </footer>
+    </div>
+
+    <script>
+        // Dark mode detection
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+
+        // State
+        let selectedSubject = null;
+        let selectedUnit = null;
+        let selectedCode = null;
+        let selectedUnitNum = null;
+
+        // DOM Elements
+        const mainContainer = document.getElementById('mainContainer');
+        const subjectGrid = document.getElementById('subjectGrid');
+        const monthSelect = document.getElementById('monthSelect');
+        const yearSelect = document.getElementById('yearSelect');
+        const quickYears = document.getElementById('quickYears');
+        const resultsCard = document.getElementById('resultsCard');
+        const emptyState = document.getElementById('emptyState');
+        const qpLink = document.getElementById('qpLink');
+        const msLink = document.getElementById('msLink');
+        const resultTitle = document.getElementById('resultTitle');
+        const resultBadge = document.getElementById('resultBadge');
+        const pdfViewerSection = document.getElementById('pdfViewerSection');
+        const pdfContainer = document.getElementById('pdfContainer');
+        const viewerBadge = document.getElementById('viewerBadge');
+        const viewerTitleText = document.getElementById('viewerTitleText');
+        const closeViewerBtn = document.getElementById('closeViewerBtn');
+        const viewQpBtn = document.getElementById('viewQpBtn');
+        const viewMsBtn = document.getElementById('viewMsBtn');
+        const viewBothBtn = document.getElementById('viewBothBtn');
+
+        // Populate years (2010-current)
+        const currentYear = new Date().getFullYear();
+        const years = [];
+        for (let y = currentYear; y >= 2010; y--) {
+            years.push(y);
+        }
+
+        years.forEach(year => {
+            const option = document.createElement('option');
+            option.value = year;
+            option.textContent = year;
+            if (year === 2023) option.selected = true;
+            yearSelect.appendChild(option);
+        });
+
+        // Function to filter years based on selected subject
+        function updateYearOptions() {
+            const isLegacy = selectedSubject === 'ChemistryLegacy';
+            Array.from(yearSelect.options).forEach(option => {
+                const yr = parseInt(option.value);
+                if (isLegacy) {
+                    // Legacy only supports 2010-2019
+                    option.disabled = yr < 2010 || yr > 2019;
+                    option.style.display = (yr < 2010 || yr > 2019) ? 'none' : '';
+                } else {
+                    option.disabled = false;
+                    option.style.display = '';
+                }
+            });
+            // If current selection is invalid for legacy, reset to 2019
+            if (isLegacy && parseInt(yearSelect.value) > 2019) {
+                yearSelect.value = '2019';
+            }
+        }
+
+        // Quick year buttons
+        const recentYears = [2024, 2023, 2022, 2021, 2020];
+        recentYears.forEach(year => {
+            const btn = document.createElement('button');
+            btn.className = 'quick-year-btn' + (year === 2023 ? ' active' : '');
+            btn.textContent = year;
+            btn.addEventListener('click', () => {
+                yearSelect.value = year;
+                document.querySelectorAll('.quick-year-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                updateLinks();
+            });
+            quickYears.appendChild(btn);
+        });
+
+        // Subject button clicks
+        subjectGrid.addEventListener('click', (e) => {
+            const btn = e.target.closest('.subject-btn');
+            if (!btn) return;
+
+            document.querySelectorAll('.subject-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            selectedSubject = btn.dataset.subject;
+            selectedUnit = btn.dataset.unit;
+            selectedCode = btn.dataset.code;
+            selectedUnitNum = btn.dataset.unitnum || null;
+
+            updateYearOptions();
+            updateLinks();
+            closeViewer();
+        });
+
+        // Select changes
+        monthSelect.addEventListener('change', () => {
+            updateLinks();
+            closeViewer();
+        });
+        yearSelect.addEventListener('change', () => {
+            const year = parseInt(yearSelect.value);
+            document.querySelectorAll('.quick-year-btn').forEach(btn => {
+                btn.classList.toggle('active', parseInt(btn.textContent) === year);
+            });
+            updateLinks();
+            closeViewer();
+        });
+
+        function generateUrl(type) {
+            const month = monthSelect.value;
+            const year = parseInt(yearSelect.value);
+
+            if (selectedSubject === 'Physics') {
+                const monthYear = encodeURIComponent(`${month} ${year} (IAL)`);
+                const baseUrl = 'https://pmt.physicsandmathstutor.com/download/Physics/A-level/Past-Papers/Edexcel-IAL/2018-spec';
+                return `${baseUrl}/${selectedUnit}/${type}/${monthYear}%20${type}.pdf`;
+            } else if (selectedSubject === 'Chemistry') {
+                const monthYear = encodeURIComponent(`${month} ${year} (IAL)`);
+                const baseUrl = 'https://pmt.physicsandmathstutor.com/download/Chemistry/A-level/Past-Papers/Edexcel-IAL/2018-spec';
+                return `${baseUrl}/${selectedUnit}/${type}/${monthYear}%20${type}.pdf`;
+            } else if (selectedSubject === 'ChemistryLegacy') {
+                // Legacy chemistry papers (2010-2019) have different naming conventions
+                const baseUrl = 'https://pmt.physicsandmathstutor.com/download/Chemistry/A-level/Past-Papers/Edexcel-IAL';
+                let filename;
+
+                // Determine if it uses (IAL) tag and Paper vs Unit naming
+                const isOctober = month === 'October';
+                const isJanuary = month === 'January';
+
+                if (year < 2014) {
+                    // Pre-2014: No (IAL), uses "Unit X Edexcel Chemistry A-level"
+                    filename = `${month} ${year} ${type} - Unit ${selectedUnitNum} Edexcel Chemistry A-level`;
+                } else if ((isOctober && year >= 2017) || (isJanuary && year >= 2019)) {
+                    // October 2017+, January 2019+: Uses (IAL), "Paper X Edexcel Chemistry A-Level"
+                    filename = `${month} ${year} (IAL) ${type} - Paper ${selectedUnitNum} Edexcel Chemistry A-Level`;
+                } else if (month === 'June' && year === 2016) {
+                    // June 2016 (IAL): Special case - "Unit X Edexcel Chemistry" (no A-level)
+                    filename = `${month} ${year} (IAL) ${type} - Unit ${selectedUnitNum} Edexcel Chemistry`;
+                } else if (year >= 2014) {
+                    // 2014-2018 IAL: Uses (IAL), "Unit X Edexcel Chemistry A-level"
+                    filename = `${month} ${year} (IAL) ${type} - Unit ${selectedUnitNum} Edexcel Chemistry A-level`;
+                }
+
+                return `${baseUrl}/${selectedUnit}/${encodeURIComponent(filename)}.pdf`;
+            } else {
+                const monthYear = encodeURIComponent(`${month} ${year}`);
+                const baseUrl = 'https://pmt.physicsandmathstutor.com/download/Maths/A-level/Papers/Edexcel-IAL';
+                return `${baseUrl}/${selectedSubject}/${selectedUnit}/${type}/${monthYear}%20${type}.pdf`;
+            }
+        }
+
+        function updateLinks() {
+            if (!selectedSubject) {
+                resultsCard.classList.remove('show');
+                emptyState.style.display = 'block';
+                return;
+            }
+
+            emptyState.style.display = 'none';
+            resultsCard.classList.add('show');
+
+            const month = monthSelect.value;
+            const year = yearSelect.value;
+
+            resultTitle.textContent = `${month} ${year}`;
+            resultBadge.textContent = `${selectedUnit} · ${selectedCode}`;
+            resultBadge.className = 'result-badge ' + selectedSubject.toLowerCase();
+
+            qpLink.href = generateUrl('QP');
+            msLink.href = generateUrl('MS');
+        }
+
+        // PDF Viewer Functions
+        function createPdfFrame(type, url) {
+            const wrapper = document.createElement('div');
+            wrapper.className = `pdf-frame-wrapper ${type.toLowerCase()}`;
+
+            const header = document.createElement('div');
+            header.className = 'pdf-frame-header';
+
+            const title = document.createElement('div');
+            title.className = 'pdf-frame-title';
+            title.innerHTML = type === 'QP'
+                ? '<i class="fas fa-file-alt"></i> Question Paper'
+                : '<i class="fas fa-check-circle"></i> Mark Scheme';
+
+            const downloadLink = document.createElement('a');
+            downloadLink.className = 'pdf-frame-download';
+            downloadLink.href = url;
+            downloadLink.target = '_blank';
+            downloadLink.innerHTML = '<i class="fas fa-download"></i> Download';
+
+            header.appendChild(title);
+            header.appendChild(downloadLink);
+
+            const iframe = document.createElement('iframe');
+            iframe.className = 'pdf-frame';
+            // Use Google Docs Viewer for full PDF viewing with all pages
+            const viewerUrl = `https://docs.google.com/viewer?url=${encodeURIComponent(url)}&embedded=true`;
+            iframe.src = viewerUrl;
+            iframe.title = type === 'QP' ? 'Question Paper' : 'Mark Scheme';
+            iframe.setAttribute('allowfullscreen', 'true');
+
+            wrapper.appendChild(header);
+            wrapper.appendChild(iframe);
+
+            return wrapper;
+        }
+
+        function openViewer(mode) {
+            pdfContainer.innerHTML = '';
+
+            const qpUrl = generateUrl('QP');
+            const msUrl = generateUrl('MS');
+            const month = monthSelect.value;
+            const year = yearSelect.value;
+
+            if (mode === 'qp') {
+                viewerBadge.textContent = 'QP';
+                viewerBadge.className = 'viewer-title-badge qp';
+                viewerTitleText.textContent = `Question Paper - ${month} ${year}`;
+                pdfContainer.classList.remove('side-by-side');
+                pdfContainer.appendChild(createPdfFrame('QP', qpUrl));
+            } else if (mode === 'ms') {
+                viewerBadge.textContent = 'MS';
+                viewerBadge.className = 'viewer-title-badge ms';
+                viewerTitleText.textContent = `Mark Scheme - ${month} ${year}`;
                 pdfContainer.classList.remove('side-by-side');
                 pdfContainer.appendChild(createPdfFrame('MS', msUrl));
             } else if (mode === 'both') {
