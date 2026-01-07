@@ -24,6 +24,7 @@
             --stats: #ec4899;
             --physics: #3b82f6;
             --chemistry: #10b981;
+            --legacy: #8b5cf6;
             --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
             --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
         }
@@ -176,12 +177,18 @@
         .subject-btn[data-subject="Statistics"] .unit { color: var(--stats); }
         .subject-btn[data-subject="Physics"] .unit { color: var(--physics); }
         .subject-btn[data-subject="Chemistry"] .unit { color: var(--chemistry); }
+        .subject-btn[data-subject="ChemistryLegacy"] .unit { color: var(--legacy); }
 
         .subject-btn.active[data-subject="Mechanics"] { border-color: var(--mechanics); background: rgba(245, 158, 11, 0.15); }
         .subject-btn.active[data-subject="Pure"] { border-color: var(--pure); background: rgba(99, 102, 241, 0.15); }
         .subject-btn.active[data-subject="Statistics"] { border-color: var(--stats); background: rgba(236, 72, 153, 0.15); }
         .subject-btn.active[data-subject="Physics"] { border-color: var(--physics); background: rgba(59, 130, 246, 0.15); }
         .subject-btn.active[data-subject="Chemistry"] { border-color: var(--chemistry); background: rgba(16, 185, 129, 0.15); }
+        .subject-btn.active[data-subject="ChemistryLegacy"] { border-color: var(--legacy); background: rgba(139, 92, 246, 0.15); }
+
+        .subject-btn.legacy {
+            border-style: dashed;
+        }
 
         /* Selection Row */
         .selection-row {
@@ -284,6 +291,7 @@
         .result-badge.statistics { background: rgba(236, 72, 153, 0.15); color: var(--stats); }
         .result-badge.physics { background: rgba(59, 130, 246, 0.15); color: var(--physics); }
         .result-badge.chemistry { background: rgba(16, 185, 129, 0.15); color: var(--chemistry); }
+        .result-badge.chemistrylegacy { background: rgba(139, 92, 246, 0.15); color: var(--legacy); }
 
         /* Paper Links Grid */
         .paper-links {
@@ -690,9 +698,57 @@
         .hidden {
             display: none !important;
         }
+
+        /* Portal Button */
+        .portal-btn {
+            position: fixed;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            color: var(--text-muted);
+            text-decoration: none;
+            box-shadow: var(--shadow);
+            transition: all 0.2s;
+            z-index: 100;
+        }
+
+        .portal-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            transform: translateY(-50%) scale(1.05);
+        }
+
+        .portal-btn i {
+            font-size: 1.1rem;
+        }
+
+        @media (max-width: 600px) {
+            .portal-btn {
+                left: 8px;
+                width: 36px;
+                height: 36px;
+            }
+
+            .portal-btn i {
+                font-size: 1rem;
+            }
+        }
     </style>
 </head>
 <body>
+    <!-- Portal Button -->
+    <a href="https://xenability.github.io/websites/" class="portal-btn" title="Back to Portal">
+        <i class="fas fa-home"></i>
+    </a>
+
     <div class="container" id="mainContainer">
         <header>
             <div class="logo">
@@ -780,6 +836,19 @@
                 <button class="subject-btn" data-subject="Chemistry" data-unit="Unit-3" data-code="WCH13">
                     <div class="unit">CHE3</div>
                     <div class="code">WCH13</div>
+                </button>
+                <!-- Chemistry Legacy -->
+                <button class="subject-btn legacy" data-subject="ChemistryLegacy" data-unit="Unit-1" data-unitnum="1" data-code="Legacy">
+                    <div class="unit">CHE1</div>
+                    <div class="code">Legacy</div>
+                </button>
+                <button class="subject-btn legacy" data-subject="ChemistryLegacy" data-unit="Unit-2" data-unitnum="2" data-code="Legacy">
+                    <div class="unit">CHE2</div>
+                    <div class="code">Legacy</div>
+                </button>
+                <button class="subject-btn legacy" data-subject="ChemistryLegacy" data-unit="Unit-3" data-unitnum="3" data-code="Legacy">
+                    <div class="unit">CHE3</div>
+                    <div class="code">Legacy</div>
                 </button>
             </div>
         </div>
@@ -901,6 +970,7 @@
         let selectedSubject = null;
         let selectedUnit = null;
         let selectedCode = null;
+        let selectedUnitNum = null;
 
         // DOM Elements
         const mainContainer = document.getElementById('mainContainer');
@@ -923,10 +993,10 @@
         const viewMsBtn = document.getElementById('viewMsBtn');
         const viewBothBtn = document.getElementById('viewBothBtn');
 
-        // Populate years (2014-2024)
+        // Populate years (2009-current for legacy support)
         const currentYear = new Date().getFullYear();
         const years = [];
-        for (let y = currentYear; y >= 2014; y--) {
+        for (let y = currentYear; y >= 2009; y--) {
             years.push(y);
         }
 
@@ -964,6 +1034,7 @@
             selectedSubject = btn.dataset.subject;
             selectedUnit = btn.dataset.unit;
             selectedCode = btn.dataset.code;
+            selectedUnitNum = btn.dataset.unitnum || null;
 
             updateLinks();
             closeViewer();
@@ -985,7 +1056,7 @@
 
         function generateUrl(type) {
             const month = monthSelect.value;
-            const year = yearSelect.value;
+            const year = parseInt(yearSelect.value);
 
             if (selectedSubject === 'Physics') {
                 const monthYear = encodeURIComponent(`${month} ${year} (IAL)`);
@@ -995,6 +1066,18 @@
                 const monthYear = encodeURIComponent(`${month} ${year} (IAL)`);
                 const baseUrl = 'https://pmt.physicsandmathstutor.com/download/Chemistry/A-level/Past-Papers/Edexcel-IAL/2018-spec';
                 return `${baseUrl}/${selectedUnit}/${type}/${monthYear}%20${type}.pdf`;
+            } else if (selectedSubject === 'ChemistryLegacy') {
+                // Legacy chemistry papers have different naming conventions
+                const baseUrl = 'https://pmt.physicsandmathstutor.com/download/Chemistry/A-level/Past-Papers/Edexcel-IAL';
+                let filename;
+                if (year >= 2014) {
+                    // 2014-2017: "Month Year (IAL) QP - Paper X Edexcel Chemistry A-Level.pdf"
+                    filename = encodeURIComponent(`${month} ${year} (IAL) ${type} - Paper ${selectedUnitNum} Edexcel Chemistry A-Level`);
+                } else {
+                    // Pre-2014: "Month Year QP - Unit X Edexcel Chemistry A-level.pdf"
+                    filename = encodeURIComponent(`${month} ${year} ${type} - Unit ${selectedUnitNum} Edexcel Chemistry A-level`);
+                }
+                return `${baseUrl}/${selectedUnit}/${filename}.pdf`;
             } else {
                 const monthYear = encodeURIComponent(`${month} ${year}`);
                 const baseUrl = 'https://pmt.physicsandmathstutor.com/download/Maths/A-level/Papers/Edexcel-IAL';
