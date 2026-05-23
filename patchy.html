@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voile Magic Library - Patchouli Knowledge Deep Grimoire</title>
+    <!-- Tailwind CSS for modern responsive layout and utilities -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Cinzel (Medieval Gothic Serif) and Inter (Clean Sans-Serif) -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #030008;
+            color: #e2e8f0;
+        }
+        .gothic-title {
+            font-family: 'Cinzel', serif;
+        }
+        /* Custom scrollbar matching alchemical archive aesthetic */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #090514;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #5b21b6;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #7c3aed;
+        }
+        /* Glowing magic shadows */
+        .magic-glow {
+            box-shadow: 0 0 15px rgba(139, 92, 246, 0.35);
+        }
+        .magic-glow-gold {
+            box-shadow: 0 0 15px rgba(234, 179, 8, 0.35);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col overflow-x-hidden">
+
+    <!-- Top Header: Real-time Vital and Mana Monitoring Console -->
+    <header class="border-b border-purple-900/50 bg-slate-950/80 backdrop-blur-md sticky top-0 z-50 px-4 py-3">
+        <div class="max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-4">
+            <!-- Title Section -->
+            <div class="flex items-center gap-3">
+                <div class="relative w-12 h-12 flex items-center justify-center bg-purple-950/50 border border-purple-500/50 rounded-full animate-pulse magic-glow">
+                    <!-- Moon & Star Symbol SVG -->
+                    <svg class="w-7 text-yellow-400" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12.3 22h-.1c-5.5 0-10-4.5-10-10 0-4.8 3.5-8.9 8.2-9.8.5-.1 1 .2 1.2.7.2.5 0 1.1-.4 1.4-2.8 2-3.3 5.7-1.3 8.5 2 2.8 5.7 3.3 8.5 1.3.4-.3 1-.3 1.4.1.4.4.5 1 .2 1.4-1.7 2.8-4.7 4.3-7.8 4.3zm-5.3-10c0 3.3 2.7 6 6 6 .8 0 1.5-.2 2.2-.5-2.2-1.9-2.9-5.1-1.6-7.8 1.3-2.7 4-4.3 6.9-4.2-.8-1.5-2.4-2.5-4.2-2.5-2.8 0-5.1 2.2-5.3 5h-.1c-2.1 0-3.9 1.8-3.9 4z"/>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-xl md:text-2xl font-bold tracking-wider text-purple-200 gothic-title flex items-center gap-2">
+                        <span>PATCHOULI KNOWLEDGE</span>
+                        <span class="text-[10px] md:text-xs bg-purple-900/80 text-purple-300 border border-purple-500/30 px-2 py-0.5 rounded tracking-normal">The Unmoving Great Library</span>
+                    </h1>
+                    <p class="text-xs text-slate-400">System Core: Mathematical Synthesis of Wu Xing & Seven Elements</p>
+                </div>
+            </div>
+
+            <!-- Vital Vane Dashboard (Reactive Stats Panel) -->
+            <div class="flex flex-wrap items-center gap-4 bg-purple-950/30 border border-purple-900/50 p-2.5 rounded-lg text-xs w-full lg:w-auto justify-around">
+                <!-- HP Bar -->
+                <div class="flex flex-col w-24">
+                    <div class="flex justify-between mb-1 text-slate-400 font-mono">
+                        <span>HP (Vitality)</span>
+                        <span id="hp-val" class="font-bold text-rose-400">45/100</span>
+                    </div>
+                    <div class="w-full bg-slate-900 h-1.5 rounded-full overflow-hidden border border-slate-800">
+                        <div id="hp-bar" class="bg-rose-500 h-full transition-all duration-500" style="width: 45%;"></div>
+                    </div>
+                </div>
+                <!-- Mana Bar -->
+                <div class="flex flex-col w-24">
+                    <div class="flex justify-between mb-1 text-slate-400 font-mono">
+                        <span>Mana (Core)</span>
+                        <span id="mana-val" class="font-bold text-blue-400">80/100</span>
+                    </div>
+                    <div class="w-full bg-slate-900 h-1.5 rounded-full overflow-hidden border border-slate-800">
+                        <div id="mana-bar" class="bg-blue-500 h-full transition-all duration-500" style="width: 80%;"></div>
+                    </div>
+                </div>
+                <!-- Asthma Level -->
+                <div class="flex flex-col w-24">
+                    <div class="flex justify-between mb-1 text-slate-400 font-mono">
+                        <span>Asthma Sev.</span>
+                        <span id="asthma-val" class="font-bold text-amber-400">65%</span>
+                    </div>
+                    <div class="w-full bg-slate-900 h-1.5 rounded-full overflow-hidden border border-slate-800">
+                        <div id="asthma-bar" class="bg-amber-500 h-full transition-all duration-500" style="width: 65%;"></div>
+                    </div>
+                </div>
+                <!-- Anemia Suppression -->
+                <div class="flex flex-col w-24">
+                    <div class="flex justify-between mb-1 text-slate-400 font-mono">
+                        <span>Anemia Inhib.</span>
+                        <span id="anemia-val" class="font-bold text-purple-400">70%</span>
+                    </div>
+                    <div class="w-full bg-slate-900 h-1.5 rounded-full overflow-hidden border border-slate-800">
+                        <div id="anemia-bar" class="bg-purple-500 h-full transition-all duration-500" style="width: 70%;"></div>
+                    </div>
+                </div>
+
+                <!-- Action Therapeutics Buttons -->
+                <div class="flex gap-1.5">
+                    <button onclick="handleTherapy('medicine')" class="bg-violet-800 hover:bg-violet-700 active:scale-95 text-white px-2 py-1.5 rounded transition font-medium flex items-center gap-1 border border-violet-500/30" title="Inhale Inhaler: Relieves Asthma Severity">
+                        💊 Inhale
+                    </button>
+                    <button onclick="handleTherapy('iron')" class="bg-emerald-800 hover:bg-emerald-700 active:scale-95 text-white px-2 py-1.5 rounded transition font-medium flex items-center gap-1 border border-emerald-500/30" title="Iron Supplement: Suppresses Anemia & Restores Cast Capacity">
+                        🥩 Take Iron
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Layout -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 py-6 flex flex-col md:flex-row gap-6">
+        
+        <!-- Left Side: Navigation Sidebar & Log Terminal -->
+        <aside class="md:w-64 flex-shrink-0">
+            <div class="bg-slate-950/80 border border-purple-950 p-4 rounded-xl sticky top-24 space-y-4 shadow-xl">
+                <div class="text-xs uppercase tracking-widest text-slate-500 font-bold border-b border-purple-950 pb-2">Grimoire Navigation</div>
+                <nav class="space-y-1">
+                    <button onclick="switchTab('physiology')" id="tab-btn-physiology" class="w-full text-left px-3 py-2.5 rounded-lg text-xs font-medium transition flex items-center gap-3 bg-purple-900/30 text-purple-200 border border-purple-500/30">
+                        <span class="text-base">🧬</span> Physiology & Origin
+                    </button>
+                    <button onclick="switchTab('hexagram')" id="tab-btn-hexagram" class="w-full text-left px-3 py-2.5 rounded-lg text-xs font-medium transition flex items-center gap-3 text-slate-400 hover:bg-purple-950/40 hover:text-slate-200">
+                        <span class="text-base">🪐</span> Elemental Synthesizer
+                    </button>
+                    <button onclick="switchTab('library')" id="tab-btn-library" class="w-full text-left px-3 py-2.5 rounded-lg text-xs font-medium transition flex items-center gap-3 text-slate-400 hover:bg-purple-950/40 hover:text-slate-200">
+                        <span class="text-base">📚</span> Voile Library & Grimoires
+                    </button>
+                    <button onclick="switchTab('chronology')" id="tab-btn-chronology" class="w-full text-left px-3 py-2.5 rounded-lg text-xs font-medium transition flex items-center gap-3 text-slate-400 hover:bg-purple-950/40 hover:text-slate-200">
+                        <span class="text-base">⏳</span> Mansion Chronicles
+                    </button>
+                    <button onclick="switchTab('matrix')" id="tab-btn-matrix" class="w-full text-left px-3 py-2.5 rounded-lg text-xs font-medium transition flex items-center gap-3 text-slate-400 hover:bg-purple-950/40 hover:text-slate-200">
+                        <span class="text-base">🕸️</span> Relationship Matrix
+                    </button>
+                </nav>
+
+                <!-- System Terminal Output -->
+                <div class="bg-slate-900 border border-purple-900/50 p-3 rounded-lg text-[11px] space-y-2">
+                    <div class="text-purple-400 font-bold flex items-center gap-1.5">
+                        <span class="animate-ping block h-2 w-2 rounded-full bg-purple-400"></span>
+                        Voile Terminal Log:
+                    </div>
+                    <div id="sys-log" class="text-slate-400 h-20 overflow-y-auto leading-relaxed font-mono">
+                        System initialized. Please select a research terminal index.
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Right Side: Content Screen -->
+        <section class="flex-grow bg-slate-950/50 border border-purple-950/40 p-5 md:p-6 rounded-xl shadow-2xl relative overflow-hidden backdrop-blur-sm">
+            <!-- Background Magic Auroras -->
+            <div class="absolute -top-40 -right-40 w-96 h-96 bg-purple-900/10 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute -bottom-40 -left-40 w-96 h-96 bg-blue-900/10 rounded-full blur-3xl pointer-events-none"></div>
+
+            <!-- ================= TAB 1: Physiology & Origin ================= -->
+            <div id="tab-physiology" class="tab-content space-y-6">
+                <div class="border-b border-purple-900/40 pb-3 flex justify-between items-center">
+                    <div>
+                        <h2 class="text-xl md:text-2xl font-bold text-purple-100 flex items-center gap-2">
+                            <span>🧬 Physiological Mechanics & Biological Origin</span>
+                        </h2>
+                        <p class="text-xs text-slate-400">Anatomical duality of a born magician and alchemical negative feedback loops</p>
+                    </div>
+                    <span class="text-xs bg-rose-950 text-rose-300 border border-rose-500/30 px-2.5 py-1 rounded-full font-mono font-bold">CRITICAL DEBILITY</span>
+                </div>
+
+                <!-- Anatomical Blueprint -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                    <!-- Left: Interactive Anatomical Preview Vector -->
+                    <div class="lg:col-span-5 bg-slate-950 border border-purple-900/30 rounded-xl p-4 flex flex-col justify-between relative overflow-hidden min-h-[350px]">
+                        <div class="text-[10px] text-purple-400 font-mono tracking-widest mb-2 flex items-center justify-between">
+                            <span>ANATOMICAL PREVIEW [2D]</span>
+                            <span class="text-rose-500 font-bold animate-pulse">⚠ HEAVY METALS DETECTED</span>
+                        </div>
+                        
+                        <!-- SVG Anatomical Model -->
+                        <div class="flex-grow flex items-center justify-center relative">
+                            <svg class="w-full max-w-[200px] h-auto text-purple-800" viewBox="0 0 100 100" fill="none" stroke="currentColor">
+                                <!-- Cap and Ribbons -->
+                                <path d="M40 7 L60 7 L65 11 L35 11 Z" stroke-width="0.8" />
+                                <path d="M35 11 L30 20 L40 18 Z" stroke-width="0.8" />
+                                <path d="M65 11 L70 20 L60 18 Z" stroke-width="0.8" />
+                                <!-- Head and Neck -->
+                                <circle cx="50" cy="18" r="8" stroke-width="1" class="animate-pulse"/>
+                                <!-- Spine & Core Torso -->
+                                <line x1="50" y1="26" x2="50" y2="65" stroke-width="1.5"/>
+                                <!-- Left Arm -->
+                                <line x1="50" y1="35" x2="30" y2="28" stroke-width="1.2"/>
+                                <line x1="30" y1="28" x2="20" y2="35" stroke-width="1"/>
+                                <!-- Right Arm -->
+                                <line x1="50" y1="35" x2="70" y2="28" stroke-width="1.2"/>
+                                <line x1="70" y1="28" x2="80" y2="35" stroke-width="1"/>
+                                <!-- Lower Limbs -->
+                                <line x1="50" y1="65" x2="35" y2="85" stroke-width="1.2"/>
+                                <line x1="50" y1="65" x2="65" y2="85" stroke-width="1.2"/>
+                                <!-- Clickable Pathology Overlays -->
+                                <!-- Lungs (Asthma Target) -->
+                                <circle cx="50" cy="38" r="5" fill="rgba(239, 68, 68, 0.45)" stroke="#ef4444" stroke-width="0.75" id="lungs-part" class="cursor-pointer hover:scale-125 transition-transform duration-150" onclick="highlightBodyPart('lungs')"/>
+                                <!-- Magic Core (Anemia Target) -->
+                                <polygon points="50,47 54,52 50,57 46,52" fill="rgba(168, 85, 247, 0.45)" stroke="#a855f7" stroke-width="0.75" id="magic-part" class="cursor-pointer hover:scale-125 transition-transform duration-150" onclick="highlightBodyPart('magic')"/>
+                            </svg>
+                            
+                            <!-- Vector Tooltip Container -->
+                            <div class="absolute bottom-2 left-2 right-2 bg-slate-900/95 border border-purple-950 p-2.5 rounded text-[10px] space-y-1" id="body-part-desc">
+                                <span class="text-purple-300 font-bold flex items-center gap-1">
+                                    <span class="inline-block w-2 h-2 rounded-full bg-red-500"></span> Click on highlight markers (Red/Purple)
+                                </span>
+                                <p class="text-slate-400">Diagnose chronic biological anomalies and mana transmission channels directly on the specimen.</p>
+                            </div>
+                        </div>
+
+                        <!-- Heavy Metal Alchemical Accumulation Exposure Slider -->
+                        <div class="border-t border-purple-950 pt-3 mt-3">
+                            <label class="text-[10px] text-slate-400 flex justify-between mb-1">
+                                <span>Alchemical Exposure Level (Arsenic, Mercury)</span>
+                                <span id="toxicity-level" class="text-rose-400 font-mono font-bold">EXTREME</span>
+                            </label>
+                            <input type="range" id="alchemy-exposure" min="10" max="100" value="85" oninput="adjustExposure(this.value)" class="w-full accent-purple-600 h-1 bg-slate-800 rounded-lg appearance-none cursor-pointer">
+                            <p class="text-[9px] text-slate-500 mt-1">
+                                Notice: Prolonged study in unventilated chambers leads to heavy-metal alchemical dust absorption, triggering severe respiratory issues and anemia.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Right: Theoretical Academic Reports -->
+                    <div class="lg:col-span-7 space-y-5 text-xs">
+                        <div class="bg-slate-900/50 border border-purple-950 p-4 rounded-xl space-y-2.5">
+                            <h3 class="text-sm font-bold text-purple-300 border-l-2 border-purple-500 pl-2 gothic-title">Existence Essence: Born Magician</h3>
+                            <p class="text-slate-300 leading-relaxed">
+                                Patchouli is a rare breed in Gensokyo: a <strong>Born Magician (Youkai Magician)</strong>. Unlike magicians like Alice Margatroid, who achieved magician status via training and abandonment of human limits (attaining Youkai status later), Patchouli was born as a magical species. Her physical core is actually composed of highly condensed magical elements.
+                            </p>
+                            <p class="text-slate-300 leading-relaxed">
+                                This biology carries a catastrophic vulnerability: <strong>The physiological flesh is deeply entangled with the spell-weaving core</strong>. Fluctuations in ambient mana or overdrawing spiritual cells directly translate into severe somatic diseases.
+                            </p>
+                        </div>
+
+                        <div class="bg-slate-900/50 border border-purple-950 p-4 rounded-xl space-y-3">
+                            <h3 class="text-sm font-bold text-purple-300 border-l-2 border-purple-500 pl-2 gothic-title">Chronic Pathology Analysis</h3>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div class="p-2.5 bg-purple-950/20 border border-purple-950 rounded">
+                                    <strong class="text-amber-400 block mb-1">1. Chronic Asthma</strong>
+                                    <p class="text-slate-400 text-[11px] leading-relaxed">Unventilated libraries combined with toxic volatile alchemy reagents break down respiratory linings. This is why she speaks in rapid, whispered sentences.</p>
+                                </div>
+                                <div class="p-2.5 bg-purple-950/20 border border-purple-950 rounded">
+                                    <strong class="text-rose-400 block mb-1">2. Severe Anemia</strong>
+                                    <p class="text-slate-400 text-[11px] leading-relaxed">Heavy metal accumulation inhibits bone marrow hematopoiesis. This impairs long chant processes and prolonged skirmish durability.</p>
+                                </div>
+                                <div class="p-2.5 bg-purple-950/20 border border-purple-950 rounded">
+                                    <strong class="text-blue-400 block mb-1">3. Sunlight Deprivation</strong>
+                                    <p class="text-slate-400 text-[11px] leading-relaxed">Subterranean library living causes vitamin synthesis failures, rendering her night vision extremely fragile and susceptible to rapid exhaustion.</p>
+                                </div>
+                                <div class="p-2.5 bg-purple-950/20 border border-purple-950 rounded">
+                                    <strong class="text-emerald-400 block mb-1">4. Whispering Diction</strong>
+                                    <p class="text-slate-400 text-[11px] leading-relaxed">By packing high-density magical concepts into low-breath whispered chanting, she avoids violent coughing fits while retaining high-frequency spell output.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= TAB 2: Seven Elements Synthesizer ================= -->
+            <div id="tab-hexagram" class="tab-content hidden space-y-6">
+                <div class="border-b border-purple-900/40 pb-3 flex justify-between items-center">
+                    <div>
+                        <h2 class="text-xl md:text-2xl font-bold text-purple-100 flex items-center gap-2">
+                            <span>🪐 Seven Elements Magic Harmonizer</span>
+                        </h2>
+                        <p class="text-xs text-slate-400">Manipulating elemental coefficients: Select and synthesize multiple forces to compile spell cards</p>
+                    </div>
+                    <span class="text-xs bg-purple-950 text-purple-300 border border-purple-500/30 px-2.5 py-1 rounded-full font-mono font-bold">INTERACTIVE MATRIX</span>
+                </div>
+
+                <!-- Main Grid: Spell Core -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                    <!-- Left: Interactive Heptagram Array -->
+                    <div class="lg:col-span-7 bg-slate-950 border border-purple-900/40 rounded-xl p-5 flex flex-col items-center justify-between min-h-[400px]">
+                        <div class="w-full text-[10px] text-slate-400 mb-4 flex justify-between items-center font-mono">
+                            <span>ELEMENTAL COMBINATOR MATRIX</span>
+                            <span id="limit-warning" class="text-amber-400 font-bold"></span>
+                        </div>
+
+                        <!-- Heptagram SVG Magic Circle Array -->
+                        <div class="relative w-72 h-72 flex items-center justify-center my-4">
+                            <!-- Outer spinning runes -->
+                            <div class="absolute inset-0 border-2 border-dashed border-purple-900/30 rounded-full animate-[spin_60s_linear_infinite]"></div>
+                            <div class="absolute inset-4 border border-purple-500/10 rounded-full animate-[spin_20s_linear_infinite]"></div>
+
+                            <!-- Elemental Nodes -->
+                            <!-- Sun (Top) -->
+                            <button onclick="toggleElement('sun')" id="node-sun" class="absolute -top-1 w-12 h-12 rounded-full border border-yellow-500/40 bg-slate-950 flex flex-col items-center justify-center transition-all hover:scale-110 active:scale-95 z-10 hover:border-yellow-400 shadow-lg">
+                                <span class="text-sm font-bold text-yellow-500 font-mono">☉</span>
+                                <span class="text-[8px] text-slate-500 font-mono">SUN</span>
+                            </button>
+                            <!-- Moon (Top Right) -->
+                            <button onclick="toggleElement('moon')" id="node-moon" class="absolute top-12 -right-2 w-12 h-12 rounded-full border border-blue-400/40 bg-slate-950 flex flex-col items-center justify-center transition-all hover:scale-110 active:scale-95 z-10 hover:border-blue-400 shadow-lg">
+                                <span class="text-sm font-bold text-blue-400 font-mono">☽</span>
+                                <span class="text-[8px] text-slate-500 font-mono">MOON</span>
+                            </button>
+                            <!-- Fire (Bottom Right) -->
+                            <button onclick="toggleElement('fire')" id="node-fire" class="absolute bottom-16 -right-1 w-12 h-12 rounded-full border border-red-500/40 bg-slate-950 flex flex-col items-center justify-center transition-all hover:scale-110 active:scale-95 z-10 hover:border-red-400 shadow-lg">
+                                <span class="text-sm font-bold text-red-500 font-mono">♂</span>
+                                <span class="text-[8px] text-slate-500 font-mono">FIRE</span>
+                            </button>
+                            <!-- Water (Bottom) -->
+                            <button onclick="toggleElement('water')" id="node-water" class="absolute -bottom-2 left-[116px] w-12 h-12 rounded-full border border-cyan-400/40 bg-slate-950 flex flex-col items-center justify-center transition-all hover:scale-110 active:scale-95 z-10 hover:border-cyan-400 shadow-lg">
+                                <span class="text-sm font-bold text-cyan-400 font-mono">☿</span>
+                                <span class="text-[8px] text-slate-500 font-mono">WATER</span>
+                            </button>
+                            <!-- Wood (Bottom Left) -->
+                            <button onclick="toggleElement('wood')" id="node-wood" class="absolute bottom-16 -left-1 w-12 h-12 rounded-full border border-emerald-500/40 bg-slate-950 flex flex-col items-center justify-center transition-all hover:scale-110 active:scale-95 z-10 hover:border-emerald-400 shadow-lg">
+                                <span class="text-sm font-bold text-emerald-500 font-mono">♃</span>
+                                <span class="text-[8px] text-slate-500 font-mono">WOOD</span>
+                            </button>
+                            <!-- Metal (Top Left) -->
+                            <button onclick="toggleElement('metal')" id="node-metal" class="absolute top-12 -left-2 w-12 h-12 rounded-full border border-slate-400/40 bg-slate-950 flex flex-col items-center justify-center transition-all hover:scale-110 active:scale-95 z-10 hover:border-slate-300 shadow-lg">
+                                <span class="text-sm font-bold text-slate-300 font-mono">♀</span>
+                                <span class="text-[8px] text-slate-500 font-mono">METAL</span>
+                            </button>
+                            <!-- Earth (Center) -->
+                            <button onclick="toggleElement('earth')" id="node-earth" class="absolute top-[116px] left-[116px] w-12 h-12 rounded-full border border-amber-600/40 bg-slate-950 flex flex-col items-center justify-center transition-all hover:scale-110 active:scale-95 z-10 hover:border-amber-500 shadow-lg">
+                                <span class="text-sm font-bold text-amber-500 font-mono">♄</span>
+                                <span class="text-[8px] text-slate-500 font-mono">EARTH</span>
+                            </button>
+
+                            <!-- Magic Array Core -->
+                            <div class="w-16 h-16 rounded-full bg-purple-950/20 border border-purple-500/30 flex flex-col items-center justify-center text-[9px] text-purple-300 font-mono text-center leading-none">
+                                <span>ACTIVE</span>
+                                <span id="element-count-indicator" class="text-lg font-bold text-purple-400 my-0.5">0</span>
+                                <span>NODES</span>
+                            </div>
+                        </div>
+
+                        <!-- System Commands -->
+                        <div class="w-full flex justify-between gap-3 pt-4 border-t border-purple-950">
+                            <button onclick="clearElements()" class="w-1/3 bg-slate-900 hover:bg-slate-800 text-slate-400 py-2 rounded text-xs border border-slate-800 transition font-mono">
+                                CLEAR
+                            </button>
+                            <button onclick="synthesizeSpells()" class="w-2/3 bg-gradient-to-r from-purple-800 to-indigo-800 hover:from-purple-700 hover:to-indigo-700 active:scale-95 text-white py-2 rounded text-xs border border-purple-500/20 transition font-bold tracking-widest magic-glow font-mono">
+                                SYNTHESIZE SPELL
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Right: Synthesis Output Console -->
+                    <div class="lg:col-span-5 flex flex-col justify-between gap-4 text-xs">
+                        <div class="bg-slate-900/80 border border-purple-950 rounded-xl p-4 flex-grow space-y-3">
+                            <h3 class="text-[10px] font-bold text-purple-400 tracking-wider uppercase border-b border-purple-950 pb-2 font-mono">Harmonizer Compiled Stream</h3>
+                            
+                            <!-- Selected Node Tag Container -->
+                            <div class="flex flex-wrap gap-1.5 min-h-[32px] items-center" id="selected-tags-container">
+                                <span class="text-[11px] text-slate-500 italic">No elements selected. Click on the nodes above to load mana coefficients...</span>
+                            </div>
+
+                            <!-- Compiled Spellcard Details Panel -->
+                            <div id="spell-result-panel" class="bg-slate-950 border border-purple-900/50 p-4 rounded-lg hidden space-y-3 transition-all">
+                                <div class="flex justify-between items-start">
+                                    <h4 id="spell-name" class="text-sm font-bold text-yellow-400 gothic-title">Spell Card</h4>
+                                    <span id="spell-rank" class="text-[9px] bg-purple-900/60 text-purple-200 border border-purple-500/30 px-2 py-0.5 rounded font-mono">TIER</span>
+                                </div>
+                                
+                                <div class="space-y-2">
+                                    <p class="text-slate-300 leading-relaxed text-[11px]" id="spell-desc">Formula effects...</p>
+                                    <div class="grid grid-cols-2 gap-2 text-[9px] border-t border-purple-950/40 pt-2 mt-2 font-mono">
+                                        <div class="bg-purple-950/10 p-1.5 rounded border border-purple-950">
+                                            <span class="text-purple-400 block font-bold">Element Cycle</span>
+                                            <span id="spell-principle" class="text-slate-400">None</span>
+                                        </div>
+                                        <div class="bg-purple-950/10 p-1.5 rounded border border-purple-950">
+                                            <span class="text-rose-400 block font-bold">Somatic Cost</span>
+                                            <span id="spell-drain" class="text-slate-400 font-bold">None</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Static Help Guide -->
+                            <div id="spell-placeholder" class="text-[11px] text-slate-400 space-y-2 leading-relaxed h-full flex flex-col justify-center">
+                                <p class="text-center italic text-slate-500">Known Formula Recipes from the Grimoria:</p>
+                                <ul class="list-disc pl-5 space-y-1 text-slate-500">
+                                    <li><strong>Single Elements:</strong> Sun (Royal Flare), Moon (Silent Selene), Fire (Agni Shine), Water (Princess Undine)...</li>
+                                    <li><strong>Mutually Generative Dual Elements:</strong> Earth + Metal = "Emerald Megalith" (Highly stable structure)</li>
+                                    <li><strong>Mutually Overcoming Dual Elements:</strong> Water + Fire = "Phlogistic Rain" (Extreme volatile combustion)</li>
+                                    <li><strong>Five Elements Alignment:</strong> Fire + Water + Wood + Metal + Earth = "Philosopher's Stone" (Ultimate Magic Defense, requires low Anemia)</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Combat Reference Footer -->
+                        <div class="bg-slate-900/40 border border-purple-950 p-3 rounded-xl space-y-1">
+                            <span class="text-slate-400 font-bold block font-mono text-[10px]">Caster Playstyle Notes (Touhou Fighter Series):</span>
+                            <p class="text-[10px] text-slate-500 leading-normal">
+                                Patchouli is an elite long-range zoner with low physical frame data but features up to <strong>15 unique customizable spell configurations</strong>. In close quarters, her heavy alchemical grimoires serve as blunt force melee weapons, inflicting severe posture stun damage.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= TAB 3: Voile Library & Decryptable Grimoires ================= -->
+            <div id="tab-library" class="tab-content hidden space-y-6">
+                <div class="border-b border-purple-900/40 pb-3 flex justify-between items-center">
+                    <div>
+                        <h2 class="text-xl md:text-2xl font-bold text-purple-100 flex items-center gap-2">
+                            <span>📚 Voile Library & Decryption Grids</span>
+                        </h2>
+                        <p class="text-xs text-slate-400">Decrypt ancient outer-world technical books or divine rituals by channeling magic reserves</p>
+                    </div>
+                    <span class="text-xs bg-purple-950 text-purple-300 border border-purple-500/30 px-2.5 py-1 rounded-full font-mono font-bold">ARCHIVE</span>
+                </div>
+
+                <!-- Grimoire Deck -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-xs" id="book-grid">
+                    <!-- Book 1 -->
+                    <div class="bg-slate-900/60 border border-purple-950 hover:border-purple-800/80 p-4 rounded-xl space-y-3 transition-all duration-300 flex flex-col justify-between" id="book-card-1">
+                        <div>
+                            <div class="flex justify-between items-start mb-2 font-mono">
+                                <span class="text-[9px] bg-slate-950 text-purple-400 px-2 py-0.5 border border-purple-950 rounded">INDEX: BK-01</span>
+                                <span class="text-[10px] text-yellow-500 font-bold" id="book-status-1">🔒 LOCKED</span>
+                            </div>
+                            <h3 class="text-sm font-bold text-purple-200">The Ritual of Sumiyoshi Sanjin</h3>
+                            <p class="text-[11px] text-slate-400 leading-relaxed mt-2" id="book-teaser-1">
+                                An ancient scroll written in divine Hiragana characters, containing spell models to summon and anchor deities of oceans and stellar navigation...
+                            </p>
+                        </div>
+                        <div class="pt-3 border-t border-purple-950 mt-4 flex justify-between items-center font-mono">
+                            <span class="text-[9px] text-slate-500">Cost: 30 Mana</span>
+                            <button onclick="decryptBook(1, 30)" class="bg-purple-900/50 hover:bg-purple-800 text-purple-200 border border-purple-500/30 text-[10px] px-2.5 py-1.5 rounded transition">
+                                DECRYPT
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Book 2 -->
+                    <div class="bg-slate-900/60 border border-purple-950 hover:border-purple-800/80 p-4 rounded-xl space-y-3 transition-all duration-300 flex flex-col justify-between" id="book-card-2">
+                        <div>
+                            <div class="flex justify-between items-start mb-2 font-mono">
+                                <span class="text-[9px] bg-slate-950 text-purple-400 px-2 py-0.5 border border-purple-950 rounded">INDEX: BK-02</span>
+                                <span class="text-[10px] text-yellow-500 font-bold" id="book-status-2">🔒 LOCKED</span>
+                            </div>
+                            <h3 class="text-sm font-bold text-purple-200">Outer World Astronautics: Saturn V</h3>
+                            <p class="text-[11px] text-slate-400 leading-relaxed mt-2" id="book-teaser-2">
+                                A highly precise mathematical document recovered from the Outside World, utilizing a bizarre cipher system known as "Esperanto"...
+                            </p>
+                        </div>
+                        <div class="pt-3 border-t border-purple-950 mt-4 flex justify-between items-center font-mono">
+                            <span class="text-[9px] text-slate-500">Cost: 45 Mana</span>
+                            <button onclick="decryptBook(2, 45)" class="bg-purple-900/50 hover:bg-purple-800 text-purple-200 border border-purple-500/30 text-[10px] px-2.5 py-1.5 rounded transition">
+                                DECRYPT
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Book 3 -->
+                    <div class="bg-slate-900/60 border border-purple-950 hover:border-purple-800/80 p-4 rounded-xl space-y-3 transition-all duration-300 flex flex-col justify-between" id="book-card-3">
+                        <div>
+                            <div class="flex justify-between items-start mb-2 font-mono">
+                                <span class="text-[9px] bg-slate-950 text-purple-400 px-2 py-0.5 border border-purple-950 rounded">INDEX: BK-03</span>
+                                <span class="text-[10px] text-yellow-500 font-bold" id="book-status-3">🔒 LOCKED</span>
+                            </div>
+                            <h3 class="text-sm font-bold text-purple-200">Hydrodynamic Flow & Barrier Repulsion</h3>
+                            <p class="text-[11px] text-slate-400 leading-relaxed mt-2" id="book-teaser-3">
+                                Detailed theorems describing spell methods to repulse water particles, coated in an active alchemical membrane designed to resist liquid ingress...
+                            </p>
+                        </div>
+                        <div class="pt-3 border-t border-purple-950 mt-4 flex justify-between items-center font-mono">
+                            <span class="text-[9px] text-slate-500">Cost: 20 Mana</span>
+                            <button onclick="decryptBook(3, 20)" class="bg-purple-900/50 hover:bg-purple-800 text-purple-200 border border-purple-500/30 text-[10px] px-2.5 py-1.5 rounded transition">
+                                DECRYPT
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Climate Dilemma Warning Report -->
+                <div class="bg-amber-950/20 border border-amber-900/50 rounded-xl p-4 space-y-2 text-amber-300 text-xs">
+                    <strong class="flex items-center gap-1.5 text-sm">
+                        <span>⚠ Architecture Climate Conflict Report:</span>
+                    </strong>
+                    <p class="leading-relaxed text-[11px]">
+                        The subterranean Voile Great Library was built beneath the Scarlet Devil Mansion using original Western architectural layouts, without adapting to Japan's unique, high-humidity rainy seasons. Lacking active drainage and ventilation channels, damp air becomes trapped underground, breeding black mold. This creates a cruel somatic loop: <strong>Patchouli's collection and hair require total sun blockage to avoid deterioration, yet retreating into the damp dark ensures her chronic asthma can never be cured.</strong>
+                    </p>
+                </div>
+            </div>
+
+            <!-- ================= TAB 4: Mansion Chronicles ================= -->
+            <div id="tab-chronology" class="tab-content hidden space-y-6">
+                <div class="border-b border-purple-900/40 pb-3 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                    <div>
+                        <h2 class="text-xl md:text-2xl font-bold text-purple-100 flex items-center gap-2">
+                            <span>⏳ Mansion Chronicles & Incident Records</span>
+                        </h2>
+                        <p class="text-xs text-slate-400">Chronological logs of Patchouli's major tactical designs and scientific endeavors</p>
+                    </div>
+                    
+                    <!-- Search Filter Console -->
+                    <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto font-mono text-xs">
+                        <input type="text" id="chrono-search" oninput="filterChronology()" placeholder="Search terms..." class="bg-slate-900 border border-purple-950 text-slate-200 px-2.5 py-1.5 rounded focus:outline-none focus:border-purple-600 transition w-full sm:w-40">
+                        <select id="chrono-type" onchange="filterChronology()" class="bg-slate-900 border border-purple-950 text-slate-300 px-2 py-1.5 rounded focus:outline-none focus:border-purple-600 transition">
+                            <option value="all">All Logs</option>
+                            <option value="combat">Combat Ops</option>
+                            <option value="engineering">Engineering</option>
+                            <option value="incident">Incidents</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Timeline Container -->
+                <div class="space-y-4 relative before:absolute before:inset-y-0 before:left-3.5 before:w-0.5 before:bg-purple-900/40 text-xs" id="timeline-container">
+                    <!-- Chronology 1 -->
+                    <div class="timeline-item flex gap-4" data-title="Scarlet Mist Incident" data-desc="Remilia scarlet mist patchouli philosopher's stone water barrier rain" data-type="combat">
+                        <div class="relative z-10 flex items-center justify-center w-7 h-7 bg-purple-950 border border-purple-500/50 rounded-full flex-shrink-0 text-[10px] font-bold text-purple-300 font-mono">1</div>
+                        <div class="bg-slate-900/80 border border-purple-950 p-4 rounded-xl flex-grow space-y-2">
+                            <div class="flex justify-between items-start flex-wrap gap-2">
+                                <h3 class="font-bold text-purple-200 text-sm">The Scarlet Mist Incident (Embodiment of Scarlet Devil)</h3>
+                                <span class="bg-red-950 text-red-300 border border-red-500/30 px-2 py-0.5 rounded text-[10px] font-mono">COMBAT CORE</span>
+                            </div>
+                            <p class="text-slate-300 leading-relaxed text-[11px]">
+                                When Reimu and her allies breached the mansion, Patchouli was suffering from peak anemia, restricting her from outputting high-element compositions, and was defeated. Afterward, to prevent Flandre Scarlet from escaping during the confusion, she conjured massive localized rainstorms around the mansion premises—exploiting vampires' biological inability to cross moving water networks—thereby sealing Flandre inside the estate grounds.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Chronology 2 -->
+                    <div class="timeline-item flex gap-4" data-title="Spring Snow Incident" data-desc="spring snow cherry blossom clay diorama model remilia" data-type="engineering">
+                        <div class="relative z-10 flex items-center justify-center w-7 h-7 bg-purple-950 border border-purple-500/50 rounded-full flex-shrink-0 text-[10px] font-bold text-purple-300 font-mono">2</div>
+                        <div class="bg-slate-900/80 border border-purple-950 p-4 rounded-xl flex-grow space-y-2">
+                            <div class="flex justify-between items-start flex-wrap gap-2">
+                                <h3 class="font-bold text-purple-200 text-sm">Spring Snow Observation Diorama (Perfect Cherry Blossom Epilogue)</h3>
+                                <span class="bg-emerald-950 text-emerald-300 border border-emerald-500/30 px-2 py-0.5 rounded text-[10px] font-mono">ENGINEERING</span>
+                            </div>
+                            <p class="text-slate-300 leading-relaxed text-[11px]">
+                                After the spring recovery incident was resolved, Patchouli revealed her meticulous craftsmanship. To appease Remilia's intense frustration over missing the fleeting outdoor cherry blossom season, Patchouli spent days crafting an incredibly intricate, hand-molded clay diorama of miniature blooming cherry trees, bringing spring indoors to the vampire.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Chronology 3 -->
+                    <div class="timeline-item flex gap-4" data-title="Feast of Gathering" data-desc="suika ibuki bean throwing setsubun ritual" data-type="combat">
+                        <div class="relative z-10 flex items-center justify-center w-7 h-7 bg-purple-950 border border-purple-500/50 rounded-full flex-shrink-0 text-[10px] font-bold text-purple-300 font-mono">3</div>
+                        <div class="bg-slate-900/80 border border-purple-950 p-4 rounded-xl flex-grow space-y-2">
+                            <div class="flex justify-between items-start flex-wrap gap-2">
+                                <h3 class="font-bold text-purple-200 text-sm">Anti-Oni Setsubun Defense (Immaterial and Missing Power)</h3>
+                                <span class="bg-red-950 text-red-300 border border-red-500/30 px-2 py-0.5 rounded text-[10px] font-mono">COMBAT CORE</span>
+                            </div>
+                            <p class="text-slate-300 leading-relaxed text-[11px]">
+                                Sensing a lingering, oppressive Oni aura (from Suika Ibuki), Patchouli organized a massive, unseasonable Setsubun bean-throwing festival at the mansion. She later explained the strategic rationale to Aya Shameimaru: Oni are fundamentally repulsed by cooked soybeans, so flooding the mansion with these beans erected a high-order conceptual defensive perimeter against Oni infiltration.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Chronology 4 -->
+                    <div class="timeline-item flex gap-4" data-title="Lunar Rocket Project" data-desc="lunar rocket saturn v moon sumiyoshi sanjin remilia" data-type="engineering">
+                        <div class="relative z-10 flex items-center justify-center w-7 h-7 bg-purple-950 border border-purple-500/50 rounded-full flex-shrink-0 text-[10px] font-bold text-purple-300 font-mono">4</div>
+                        <div class="bg-slate-900/80 border border-purple-950 p-4 rounded-xl flex-grow space-y-2">
+                            <div class="flex justify-between items-start flex-wrap gap-2">
+                                <h3 class="font-bold text-purple-200 text-sm">The Lunar Manned Rocket Project (Silent Sinner in Scarlet)</h3>
+                                <span class="bg-emerald-950 text-emerald-300 border border-emerald-500/30 px-2 py-0.5 rounded text-[10px] font-mono">ENGINEERING</span>
+                            </div>
+                            <p class="text-slate-300 leading-relaxed text-[11px]">
+                                When Remilia demanded to fly to the Moon, Patchouli was appointed Chief Rocket Engineer. She adapted a Saturn V blueprint obtained from Kourindou, learning that rocket mechanics require three separation stages. She fused this physics concept with Shinto divinity, designing a vessel fueled by the spiritual propulsion of "Sumiyoshi Sanjin" summoned through Reimu's ritual.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Chronology 5 -->
+                    <div class="timeline-item flex gap-4" data-title="Mizuchi Miyadeguchi Invasion" data-desc="mizuchi miyadeguchi ghost possession comatose" data-type="incident">
+                        <div class="relative z-10 flex items-center justify-center w-7 h-7 bg-purple-950 border border-purple-500/50 rounded-full flex-shrink-0 text-[10px] font-bold text-purple-300 font-mono">5</div>
+                        <div class="bg-slate-900/80 border border-purple-950 p-4 rounded-xl flex-grow space-y-2">
+                            <div class="flex justify-between items-start flex-wrap gap-2">
+                                <h3 class="font-bold text-purple-200 text-sm">Mizuchi Miyadeguchi Core Drain (Foul Detective Satori)</h3>
+                                <span class="bg-purple-950 text-purple-300 border border-purple-500/30 px-2 py-0.5 rounded text-[10px] font-mono">INCIDENT</span>
+                            </div>
+                            <p class="text-slate-300 leading-relaxed text-[11px]">
+                                The vengeful spirit Mizuchi Miyadeguchi targeted Patchouli, possessing her body to manipulate Voile's barriers. Because Patchouli's physical flesh is made of raw magical energy, Mizuchi's rapid siphoning of her mana reserves caused severe cellular degeneration, plunging her into immediate shock and a deep comatose state.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= TAB 5: Relationship Matrix ================= -->
+            <div id="tab-matrix" class="tab-content hidden space-y-6">
+                <div class="border-b border-purple-900/40 pb-3 flex justify-between items-center">
+                    <div>
+                        <h2 class="text-xl md:text-2xl font-bold text-purple-100 flex items-center gap-2">
+                            <span>🕸️ Sociological Relationship Matrix</span>
+                        </h2>
+                        <p class="text-xs text-slate-400">Select an associate to examine structural alignments and rivalries with Voile Library</p>
+                    </div>
+                </div>
+
+                <!-- Interactive Matrix Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-6 text-xs">
+                    <!-- Left: Profile Selector Card -->
+                    <div class="md:col-span-4 space-y-2">
+                        <button onclick="selectRelation('remilia')" id="rel-btn-remilia" class="w-full text-left p-3 rounded-xl border border-purple-500/20 bg-purple-950/20 text-purple-200 flex items-center gap-3 transition-all hover:border-purple-500/40">
+                            <span class="w-2.5 h-2.5 rounded-full bg-red-500"></span>
+                            <div class="flex-grow">
+                                <div class="font-bold">Remilia Scarlet</div>
+                                <div class="text-[10px] text-slate-400">Centuries-old Ally / Symbiosis</div>
+                            </div>
+                        </button>
+                        <button onclick="selectRelation('marisa')" id="rel-btn-marisa" class="w-full text-left p-3 rounded-xl border border-slate-800 bg-slate-900/50 text-slate-300 flex items-center gap-3 transition-all hover:border-purple-500/40">
+                            <span class="w-2.5 h-2.5 rounded-full bg-yellow-400"></span>
+                            <div class="flex-grow">
+                                <div class="font-bold">Marisa Kirisame</div>
+                                <div class="text-[10px] text-slate-400">Academic Rival / Frenemy</div>
+                            </div>
+                        </button>
+                        <button onclick="selectRelation('alice')" id="rel-btn-alice" class="w-full text-left p-3 rounded-xl border border-slate-800 bg-slate-900/50 text-slate-300 flex items-center gap-3 transition-all hover:border-purple-500/40">
+                            <span class="w-2.5 h-2.5 rounded-full bg-blue-400"></span>
+                            <div class="flex-grow">
+                                <div class="font-bold">Alice Margatroid</div>
+                                <div class="text-[10px] text-slate-400">Paradigmatic Tension / Mage Pride</div>
+                            </div>
+                        </button>
+                        <button onclick="selectRelation('sakuya')" id="rel-btn-sakuya" class="w-full text-left p-3 rounded-xl border border-slate-800 bg-slate-900/50 text-slate-300 flex items-center gap-3 transition-all hover:border-purple-500/40">
+                            <span class="w-2.5 h-2.5 rounded-full bg-slate-400"></span>
+                            <div class="flex-grow">
+                                <div class="font-bold">Sakuya Izayoi</div>
+                                <div class="text-[10px] text-slate-400">Caretaker / Cat-ears Valuation</div>
+                            </div>
+                        </button>
+                    </div>
+
+                    <!-- Right: Dynamic Profile Output -->
+                    <div class="md:col-span-8 bg-slate-900/60 border border-purple-950 rounded-xl p-5 space-y-4 flex flex-col justify-between">
+                        <div id="relation-detail" class="space-y-3">
+                            <div class="flex justify-between items-center border-b border-purple-950 pb-2">
+                                <h3 id="relation-name" class="font-bold text-sm text-purple-300">Remilia Scarlet</h3>
+                                <span id="relation-type" class="text-[9px] bg-red-950 text-red-300 px-2 py-0.5 border border-red-500/20 rounded font-mono">CENTURY ALLY</span>
+                            </div>
+                            <div class="space-y-2">
+                                <p id="relation-desc" class="text-slate-300 leading-relaxed text-[11px]">
+                                    Patchouli and Remilia share a centuries-long history of cooperative cohabitation. In the mansion, Patchouli is the only entity who operates completely on an equal footing rather than a master-servant dynamic, serving as Remilia's premier tactical adviser. Remilia supplies endless resources and absolute shelter, while Patchouli provides defensive barriers and scientific updates.
+                                </p>
+                                <div class="bg-purple-950/20 p-3 rounded border border-purple-950 space-y-1">
+                                    <span class="font-bold text-purple-400 block text-[10px] font-mono">Structural Interdependence:</span>
+                                    <p id="relation-analysis" class="text-[10px] text-slate-400 leading-relaxed">
+                                        Although Patchouli rarely exits the basement, she complies fully with Remilia's wildest demands (e.g., executing the Rocket project), showing massive tolerance for the vampire's eccentric whims.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Bar Graphs -->
+                        <div class="pt-4 border-t border-purple-950 space-y-2 font-mono text-[10px]">
+                            <span class="text-slate-400 block font-bold">Relational Alignment Metric:</span>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="space-y-1">
+                                    <div class="flex justify-between">
+                                        <span>Mutual Trust</span>
+                                        <span id="relation-trust" class="text-emerald-400 font-bold">95%</span>
+                                    </div>
+                                    <div class="w-full bg-slate-950 h-1.5 rounded-full overflow-hidden">
+                                        <div id="relation-trust-bar" class="bg-emerald-500 h-full" style="width: 95%;"></div>
+                                    </div>
+                                </div>
+                                <div class="space-y-1">
+                                    <div class="flex justify-between">
+                                        <span>Rivalry/Friction</span>
+                                        <span id="relation-rival" class="text-rose-400 font-bold">10%</span>
+                                    </div>
+                                    <div class="w-full bg-slate-950 h-1.5 rounded-full overflow-hidden">
+                                        <div id="relation-rival-bar" class="bg-rose-500 h-full" style="width: 10%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-950 border-t border-purple-950/50 py-4 px-4 text-center text-xs text-slate-500 mt-auto">
+        <p>© Touhou Project - Voile Library Digital Archives 2026. "Unmoving Academic Preservation Protocol"</p>
+        <p class="mt-1 text-[11px] text-slate-600">“Knowledge is power, but please remember to ventilate the laboratory during transmutations.”</p>
+    </footer>
+
+    <script>
+        // 1. Relational Database Definition
+        const relationsData = {
+            remilia: {
+                name: "Remilia Scarlet",
+                type: "Centuries-old Ally / Mutual Symbiosis",
+                desc: "Patchouli and Remilia share a deep historical pact. Patchouli is the only inhabitant of the Scarlet Devil Mansion who acts as Remilia's equal, serving as her chief advisor. Remilia provides complete alchemical materials and absolute seclusion, while Patchouli maintains the estate's high-order defenses.",
+                analysis: "Patchouli tolerates and executes Remilia's most chaotic desires. During the Lunar Rocket Initiative, she served as Lead Project Designer despite severe physical limitations.",
+                trust: "95%",
+                trustBar: "width: 95%;",
+                rival: "10%",
+                rivalBar: "width: 10%;"
+            },
+            marisa: {
+                name: "Marisa Kirisame",
+                type: "Academic Rival / Strategic Frenemy",
+                desc: "Marisa regularly sneaks into Voile Library to illegally 'borrow' valuable grimoires, making her a constant nuisance. However, Patchouli harbors no genuine hatred. Both share an extreme devotion to empirical, experimental magic, respecting each other's research methodologies.",
+                analysis: "During the Subterranean Geyser Incident (Subterranean Animism), Patchouli partnered with Yukari Yakumo to design a communications link, giving Marisa real-time tactical advice from above.",
+                trust: "65%",
+                trustBar: "width: 65%;",
+                rival: "85%",
+                rivalBar: "width: 85%;"
+            },
+            alice: {
+                name: "Alice Margatroid",
+                type: "Paradigmatic Tension / Magical Pride",
+                desc: "As a born magician, Patchouli looks down on Alice's post-human artificial puppet manipulation, criticizing it as child's play. Alice retaliates with academic haughtiness. This produces persistent conceptual friction between the two academies.",
+                analysis: "They represent opposite poles of classical magical science: Alice champions intricate, handcrafted puppetry, while Patchouli masterminds highly structured, planetary mathematics.",
+                trust: "40%",
+                trustBar: "width: 40%;",
+                rival: "75%",
+                rivalBar: "width: 75%;"
+            },
+            sakuya: {
+                name: "Sakuya Izayoi",
+                type: "Head Maid / Chief Caretaker",
+                desc: "Sakuya manages library maintenance and takes care of Patchouli's physical well-being—bringing her meals, tea, and medicines while hunting down outer-world periodicals. Patchouli is highly dependent on Sakuya's peak efficiency.",
+                analysis: "Despite this, Patchouli has a dry sense of humor. In one archive, she drafted a mathematical evaluation scoring Sakuya's cat-ear suitability at an underwhelming 24 out of 96.",
+                trust: "90%",
+                trustBar: "width: 90%;",
+                rival: "15%",
+                rivalBar: "width: 15%;"
+            }
+        };
+
+        const bodyPartsData = {
+            lungs: "<strong>[Pulmonary Pathology Report]</strong><br>Severe bronchial asthma triggered by alchemical exposure. Chronic inhalation of toxic particulates (arsenic, mercury, lead) during unventilated transmutations has damaged the airways. Action: Reduce heavy-metal exposure and inhale medication.",
+            magic: "<strong>[Core Mana Matrix]</strong><br>Patchouli's Youkai body is entirely woven of condensed mana channels. If an external force drains this core (e.g., Mizuchi Miyadeguchi's possession), her cell structure collapses, causing sudden coma and shock."
+        };
+
+        // 2. Reactive State Engine
+        let state = {
+            hp: 45,
+            mana: 80,
+            asthma: 65,
+            anemia: 70,
+            exposure: 85,
+            selectedElements: []
+        };
+
+        // 3. System Log Output Interface
+        function logMessage(text) {
+            const logBox = document.getElementById('sys-log');
+            const now = new Date();
+            const timeStr = `[${now.toTimeString().split(' ')[0]}] `;
+            logBox.innerHTML = `${timeStr}${text}<br>${logBox.innerHTML}`;
+        }
+
+        // 4. Tab Switcher Controller
+        function switchTab(tabName) {
+            // Hide all contents
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            // Reset all buttons to inactive styles
+            document.querySelectorAll('nav button').forEach(el => {
+                el.className = "w-full text-left px-3 py-2.5 rounded-lg text-xs font-medium transition flex items-center gap-3 text-slate-400 hover:bg-purple-950/40 hover:text-slate-200";
+            });
+
+            // Show targeted tab content
+            document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+            // Apply active design styles to clicked tab
+            document.getElementById(`tab-btn-${tabName}`).className = "w-full text-left px-3 py-2.5 rounded-lg text-xs font-medium transition flex items-center gap-3 bg-purple-900/30 text-purple-200 border border-purple-500/30";
+
+            let tabLabel = tabName === 'physiology' ? 'Physiology Diagnostics' : 
+                           tabName === 'hexagram' ? 'Seven Elements Synthesizer' : 
+                           tabName === 'library' ? 'Voile Library Records' : 
+                           tabName === 'chronology' ? 'Mansion Chronicles' : 'Relationship Matrix';
+            logMessage(`Navigated to: ${tabLabel}`);
+        }
+
+        // Update Stats Dashboard UI
+        function updateStatsUI() {
+            document.getElementById('hp-val').innerText = `${state.hp}/100`;
+            document.getElementById('hp-bar').style.width = `${state.hp}%`;
+
+            document.getElementById('mana-val').innerText = `${state.mana}/100`;
+            document.getElementById('mana-bar').style.width = `${state.mana}%`;
+
+            document.getElementById('asthma-val').innerText = `${state.asthma}%`;
+            document.getElementById('asthma-bar').style.width = `${state.asthma}%`;
+
+            document.getElementById('anemia-val').innerText = `${state.anemia}%`;
+            document.getElementById('anemia-bar').style.width = `${state.anemia}%`;
+
+            // Adjust Toxicity text based on slider
+            const toxText = document.getElementById('toxicity-level');
+            if (state.exposure > 75) {
+                toxText.className = "text-rose-400 font-mono font-bold";
+                toxText.innerText = "CRITICAL";
+            } else if (state.exposure > 40) {
+                toxText.className = "text-amber-400 font-mono font-bold";
+                toxText.innerText = "WARNING";
+            } else {
+                toxText.className = "text-emerald-400 font-mono font-bold";
+                toxText.innerText = "SAFE LIMIT";
+            }
+
+            // Synthesizer load limits based on anemia
+            const limitWarning = document.getElementById('limit-warning');
+            if (state.anemia > 70) {
+                limitWarning.innerText = "⚠️ Severe Anemia: Caster limits load to 2 concurrent elements!";
+            } else if (state.anemia > 30) {
+                limitWarning.innerText = "⚠️ Mild Anemia: Core limits load to 3 concurrent elements.";
+            } else {
+                limitWarning.innerText = "✨ Optimal Health: Caster can combine up to 5 elements!";
+            }
+        }
+
+        // Somatic Care Handlers
+        function handleTherapy(type) {
+            if (type === 'medicine') {
+                if (state.hp >= 100 && state.asthma <= 15) {
+                    logMessage("Action Redundant: Airway coefficient is already fully clear.");
+                    return;
+                }
+                state.asthma = Math.max(15, state.asthma - 25);
+                state.hp = Math.min(100, state.hp + 15);
+                logMessage("Inhaler administered. Bronchial tubes dilated. Restored 15 HP.");
+            } else if (type === 'iron') {
+                if (state.anemia <= 15) {
+                    logMessage("Action Redundant: Blood iron saturation is at optimal levels.");
+                    return;
+                }
+                state.anemia = Math.max(15, state.anemia - 30);
+                state.hp = Math.min(100, state.hp + 10);
+                logMessage("Iron supplement absorbed. Bone marrow synthesis active. Suppressed Anemia by 30%.");
+            }
+            updateStatsUI();
+        }
+
+        // Heavy Metal Exposure Regulator
+        function adjustExposure(val) {
+            state.exposure = parseInt(val);
+            // Simulate direct negative impact on asthma & anemia levels
+            state.asthma = Math.min(100, Math.floor(20 + state.exposure * 0.6));
+            state.anemia = Math.min(100, Math.floor(15 + state.exposure * 0.75));
+            updateStatsUI();
+        }
+
+        // Anatomical Highlighter Click Callback
+        function highlightBodyPart(part) {
+            const descBox = document.getElementById('body-part-desc');
+            descBox.innerHTML = bodyPartsData[part];
+        }
+
+        // 5. Seven Elements Synthesizer Core Logic
+        function toggleElement(element) {
+            const index = state.selectedElements.indexOf(element);
+            const limit = state.anemia > 70 ? 2 : (state.anemia > 30 ? 3 : 5);
+
+            if (index > -1) {
+                // Remove element if already selected
+                state.selectedElements.splice(index, 1);
+                document.getElementById(`node-${element}`).classList.remove('ring-4', 'ring-purple-500', 'bg-purple-950/80');
+                logMessage(`Unloaded element coefficient [${element.toUpperCase()}]`);
+            } else {
+                // Enforce somatic limitations
+                if (state.selectedElements.length >= limit) {
+                    logMessage(`⚠ Dynamic Restraint: Current somatic anemia prevents loading more coefficients! Take Iron first.`);
+                    return;
+                }
+                state.selectedElements.push(element);
+                document.getElementById(`node-${element}`).classList.add('ring-4', 'ring-purple-500', 'bg-purple-950/80');
+                logMessage(`Loaded element coefficient [${element.toUpperCase()}]`);
+            }
+
+            updateSelectedTags();
+        }
+
+        // Sync visual tags
+        function updateSelectedTags() {
+            const container = document.getElementById('selected-tags-container');
+            const countInd = document.getElementById('element-count-indicator');
+            countInd.innerText = state.selectedElements.length;
+
+            if (state.selectedElements.length === 0) {
+                container.innerHTML = `<span class="text-xs text-slate-500 italic">No elements selected. Click on the nodes above to load mana coefficients...</span>`;
+                return;
+            }
+
+            container.innerHTML = state.selectedElements.map(el => {
+                let color = "bg-purple-900 border-purple-500 text-purple-200";
+                if (el === 'fire') color = "bg-red-950 border-red-500 text-red-200";
+                if (el === 'water') color = "bg-cyan-950 border-cyan-500 text-cyan-200";
+                if (el === 'sun') color = "bg-yellow-950 border-yellow-500 text-yellow-200";
+                if (el === 'moon') color = "bg-blue-950 border-blue-500 text-blue-200";
+                if (el === 'wood') color = "bg-emerald-950 border-emerald-500 text-emerald-200";
+                if (el === 'metal') color = "bg-slate-800 border-slate-400 text-slate-200";
+                if (el === 'earth') color = "bg-amber-950 border-amber-500 text-amber-200";
+
+                return `<span class="px-2 py-0.5 border text-[10px] rounded-full font-bold font-mono ${color}">${el.toUpperCase()}</span>`;
+            }).join('');
+        }
+
+        // Reset elements selection
+        function clearElements() {
+            state.selectedElements.forEach(el => {
+                document.getElementById(`node-${el}`).classList.remove('ring-4', 'ring-purple-500', 'bg-purple-950/80');
+            });
+            state.selectedElements = [];
+            updateSelectedTags();
+            document.getElementById('spell-result-panel').classList.add('hidden');
+            document.getElementById('spell-placeholder').classList.remove('hidden');
+            logMessage("Magic matrix cleared. Current elemental resonance initialized to 0.");
+        }
+
+        // Synthesis & Casting Execution Engine
+        function synthesizeSpells() {
+            if (state.selectedElements.length === 0) {
+                logMessage("Synthesis Error: No elemental coefficients loaded in the circle.");
+                return;
+            }
+
+            if (state.mana < 20) {
+                logMessage("⚠️ Warning: Mana reserves depleted. Unable to generate elemental reactions!");
+                return;
+            }
+
+            const elements = [...state.selectedElements].sort();
+            const panel = document.getElementById('spell-result-panel');
+            const placeholder = document.getElementById('spell-placeholder');
+
+            let spellName = "";
+            let spellDesc = "";
+            let rank = "";
+            let principle = "";
+            let drain = "";
+            let costHP = 0;
+            let costMana = 20;
+
+            // Five Elements Match
+            const wuxing = ['fire', 'water', 'wood', 'metal', 'earth'];
+            const isWuxing = wuxing.every(el => elements.includes(el));
+
+            if (isWuxing) {
+                spellName = "Five Elements: Philosopher's Stone";
+                spellDesc = "Patchouli's signature ultimate defensive grimoire spell. Deploys five orbiting stones, completely neutralizing incoming spiritual projectiles.";
+                rank = "Tier: Supreme Wu Xing";
+                principle = "Mutually Generative Quintet Loop";
+                drain = "Mana -45 / HP -10";
+                costHP = 10;
+                costMana = 45;
+            } else if (elements.length === 1) {
+                const single = elements[0];
+                costMana = 15;
+                if (single === 'fire') {
+                    spellName = "Fire Sign: Agni Shine";
+                    spellDesc = "Invokes the intense thermal core of the Hindu god Agni, throwing hyper-expanding bursts of red fireballs.";
+                    rank = "Tier: Basic Day Elemental";
+                    principle = "Core Fire: Transmutation Cycle";
+                    drain = "Mana -15 / HP -5";
+                    costHP = 5;
+                } else if (single === 'water') {
+                    spellName = "Water Sign: Princess Undine";
+                    spellDesc = "Summons Undine spirits to form massive water cyclones, pinning enemies inside a vacuum shield.";
+                    rank = "Tier: Basic Day Elemental";
+                    principle = "Core Water: Repulsion Barrier";
+                    drain = "Mana -15 / HP -5";
+                    costHP = 5;
+                } else if (single === 'wood') {
+                    spellName = "Wood Sign: Sylphy Horn";
+                    spellDesc = "Compresses clean atmospheric currents to shoot sharp, high-velocity wooden spikes forward.";
+                    rank = "Tier: Basic Day Elemental";
+                    principle = "Core Wood: Generation Phase";
+                    drain = "Mana -15 / HP -5";
+                    costHP = 5;
+                } else if (single === 'metal') {
+                    spellName = "Metal Sign: Metal Fatigue";
+                    spellDesc = "Injects microscopic structural stress into targets' weapons, instantly causing physical fractures.";
+                    rank = "Tier: Basic Day Elemental";
+                    principle = "Core Metal: Solid Decay";
+                    drain = "Mana -15 / HP -5";
+                    costHP = 5;
+                } else if (single === 'earth') {
+                    spellName = "Earth Sign: Lazy Trilithon";
+                    spellDesc = "Erects a heavy, dense protective megalith wall. Unmoving and highly effective at blocking physical strikes.";
+                    rank = "Tier: Basic Day Elemental";
+                    principle = "Core Earth: Infinite Inertia";
+                    drain = "Mana -15 / HP -5";
+                    costHP = 5;
+                } else if (single === 'sun') {
+                    spellName = "Sun Sign: Royal Flare";
+                    spellDesc = "Borrows raw energy from the Sun, unleashing a blinding, screen-clearing blast of solar radiation.";
+                    rank = "Tier: Advanced Solar Flare";
+                    principle = "Core Solar: Radiant Expansion";
+                    drain = "Mana -35 / HP -10";
+                    costHP = 10;
+                    costMana = 35;
+                } else if (single === 'moon') {
+                    spellName = "Moon Sign: Silent Selene";
+                    spellDesc = "Constructs a soft, moon-shrouded dome that hides the caster's core mana while absorbing damage.";
+                    rank = "Tier: Advanced Lunar Halo";
+                    principle = "Core Lunar: Silent Absorption";
+                    drain = "Mana -35 / HP -10";
+                    costHP = 10;
+                    costMana = 35;
+                }
+            } else if (elements.length === 2) {
+                const hasFire = elements.includes('fire');
+                const hasWater = elements.includes('water');
+                const hasEarth = elements.includes('earth');
+                const hasMetal = elements.includes('metal');
+                const hasWood = elements.includes('wood');
+
+                if (hasFire && hasWater) {
+                    spellName = "Water & Fire Sign: Phlogistic Rain";
+                    spellDesc = "An alchemical paradox. Forces opposing Water and Fire to violently co-exist, unleashing high-pressure boiling acid rain.";
+                    rank = "Tier: High-Risk Conflict Element";
+                    principle = "Mutual Overcoming: Core Fracture";
+                    drain = "Mana -30 / HP -15";
+                    costHP = 15;
+                    costMana = 30;
+                } else if (hasEarth && hasMetal) {
+                    spellName = "Earth & Metal Sign: Emerald Megalith";
+                    spellDesc = "Nurtures metallic compounds inside dense minerals, synthesizing highly durable emerald pillars.";
+                    rank = "Tier: Harmonious Blend Element";
+                    principle = "Earth Generates Metal: Stabilizer";
+                    drain = "Mana -25 / HP -8";
+                    costHP = 8;
+                    costMana = 25;
+                } else if (hasWater && hasWood) {
+                    spellName = "Water & Wood Sign: Water Elf";
+                    spellDesc = "Channels pure water currents to feed wooden vines, generating smart, self-aiming liquid whips.";
+                    rank = "Tier: Harmonious Blend Element";
+                    principle = "Water Generates Wood: Growth Cycle";
+                    drain = "Mana -25 / HP -5";
+                    costHP = 5;
+                    costMana = 25;
+                } else {
+                    spellName = "Dual Sign: St. Elmo's Pillar";
+                    spellDesc = "Combines kinetic forces to ignite air particles, raising high-voltage plasma shield fences.";
+                    rank = "Tier: Composite Day Element";
+                    principle = "Dual Harmonization Phase";
+                    drain = "Mana -25 / HP -10";
+                    costHP = 10;
+                    costMana = 25;
+                }
+            } else {
+                spellName = "Three-Element Sign: Orrery's Galaxy";
+                spellDesc = "Simulates orbiting planets, manipulating localized gravity and trajectory vectors.";
+                rank = "Tier: Cosmic Sub-Arcana";
+                principle = "Triple Star Orbit Convergence";
+                drain = "Mana -40 / HP -20";
+                costHP = 20;
+                costMana = 40;
+            }
+
+            // Deduct states
+            state.mana = Math.max(0, state.mana - costMana);
+            state.hp = Math.max(5, state.hp - costHP);
+            if (costHP > 10) {
+                state.asthma = Math.min(100, state.asthma + 15);
+            }
+
+            // Update Spell result details UI
+            document.getElementById('spell-name').innerText = spellName;
+            document.getElementById('spell-desc').innerText = spellDesc;
+            document.getElementById('spell-rank').innerText = rank;
+            document.getElementById('spell-principle').innerText = principle;
+            document.getElementById('spell-drain').innerText = drain;
+
+            panel.classList.remove('hidden');
+            placeholder.classList.add('hidden');
+
+            logMessage(`Spell Synced: Compiled [${spellName}] successfully. Spent ${costMana} Mana, ${costHP} HP.`);
+            updateStatsUI();
+        }
+
+        // 6. Library Grimoires Decrypt Engine
+        function decryptBook(id, cost) {
+            if (state.mana < cost) {
+                logMessage(`Decryption Failed: Patchouli possesses only ${state.mana} Mana. Cannot break high-order sealing barrier!`);
+                return;
+            }
+
+            state.mana -= cost;
+            updateStatsUI();
+
+            const card = document.getElementById(`book-card-${id}`);
+            const status = document.getElementById(`book-status-${id}`);
+            const teaser = document.getElementById(`book-teaser-${id}`);
+
+            status.innerText = "🔓 UNLOCKED";
+            status.className = "text-xs text-emerald-400 font-bold";
+            card.className = "bg-purple-950/20 border border-purple-500/50 p-4 rounded-xl space-y-3 transition-all duration-300 flex flex-col justify-between magic-glow-gold";
+
+            if (id === 1) {
+                teaser.innerHTML = `<strong>[Ritual of Sumiyoshi Sanjin Decrypted]:</strong><br>Contains spells to channel ocean-faring deities. Patchouli will adapt this spiritual system as the main propulsion engine for the Scarlet Lunar Rocket project.`;
+            } else if (id === 2) {
+                teaser.innerHTML = `<strong>[Saturn V Astronautics Decrypted]:</strong><br>Decodes the complex mathematical aerodynamics of NASA's Saturn V rocket booster system, showing that multi-stage separation is key to breaking through gravity fields.`;
+            } else if (id === 3) {
+                teaser.innerHTML = `<strong>[Hydrodynamic Flow Decrypted]:</strong><br>Reveals spells to create zero-gravity liquid barriers, allowing Patchouli to set up high-pressure rain shields that keep vampires safe from flowing water.`;
+            }
+
+            logMessage(`Grimoire Decrypted: Expended ${cost} Mana. Archive BK-0${id} database updated.`);
+        }
+
+        // 7. Chronology Filter Console
+        function filterChronology() {
+            const query = document.getElementById('chrono-search').value.toLowerCase();
+            const type = document.getElementById('chrono-type').value;
+            const items = document.querySelectorAll('.timeline-item');
+
+            items.forEach(item => {
+                const title = item.getAttribute('data-title').toLowerCase();
+                const desc = item.getAttribute('data-desc').toLowerCase();
+                const itemType = item.getAttribute('data-type');
+
+                const matchesSearch = title.includes(query) || desc.includes(query);
+                const matchesType = type === 'all' || itemType === type;
+
+                if (matchesSearch && matchesType) {
+                    item.classList.remove('hidden');
+                } else {
+                    item.classList.add('hidden');
+                }
+            });
+        }
+
+        // 8. Relationship Selection Controller
+        function selectRelation(relId) {
+            // Remove high contrast styles from siblings
+            document.querySelectorAll('#tab-matrix button').forEach(el => {
+                el.className = "w-full text-left p-3 rounded-xl border border-slate-800 bg-slate-900/50 text-slate-300 flex items-center gap-3 transition-all hover:border-purple-500/40";
+            });
+
+            // Set active focus style to selected profile button
+            document.getElementById(`rel-btn-${relId}`).className = "w-full text-left p-3 rounded-xl border border-purple-500/50 bg-purple-950/20 text-purple-200 flex items-center gap-3 transition-all";
+
+            // Sync structural profiles
+            const data = relationsData[relId];
+            document.getElementById('relation-name').innerText = data.name;
+            document.getElementById('relation-type').innerText = data.type;
+            document.getElementById('relation-desc').innerText = data.desc;
+            document.getElementById('relation-analysis').innerText = data.analysis;
+            
+            // Render numerical metrics
+            document.getElementById('relation-trust').innerText = data.trust;
+            document.getElementById('relation-trust-bar').style = data.trustBar;
+            document.getElementById('relation-rival').innerText = data.rival;
+            document.getElementById('relation-rival-bar').style = data.rivalBar;
+
+            logMessage(`Accessed sociological profile for: ${data.name}`);
+        }
+
+        // Window Initialization
+        window.onload = function() {
+            updateStatsUI();
+            logMessage("Voile Great Library protective grid active. Library atmospheric humidity: HIGH.");
+        };
+    </script>
+</body>
+</html>
