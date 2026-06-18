@@ -1,0 +1,1196 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>深圳週末雙日遊 - 智能休閒規劃助手</title>
+    <!-- Tailwind CSS for modern responsive styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts Inter for clean typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            font-family: 'Inter', 'Noto Sans TC', sans-serif;
+        }
+        /* Custom scrollbar for beautiful dashboard cards */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen pb-20 md:pb-6">
+
+<div class="max-w-6xl mx-auto px-4 py-6">
+    <!-- Header Banner -->
+    <header class="bg-gradient-to-r from-emerald-800 to-teal-700 text-white rounded-2xl p-6 md:p-8 shadow-lg mb-6 relative overflow-hidden">
+        <div class="absolute -right-10 -bottom-10 opacity-10 w-64 h-64 bg-white rounded-full"></div>
+        <div class="relative z-10">
+            <span class="bg-emerald-600/50 text-emerald-200 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider">深港一小時生活圈</span>
+            <h1 class="text-2xl md:text-4xl font-bold mt-2">深圳週末雙日遊智能規劃</h1>
+            <p class="text-emerald-100 mt-2 text-sm md:text-base max-w-2xl">
+                避開傳統人逼人景點，專注現代商場空間、綠意街區與極致美食。依據羅湖/福田雙口岸靈活切換，開啟你的週末放鬆行。
+            </p>
+            <div class="flex flex-wrap gap-4 mt-4 text-xs text-emerald-100">
+                <span class="flex items-center gap-1"><i data-lucide="calendar" class="w-4 h-4"></i> 2天1夜</span>
+                <span class="flex items-center gap-1"><i data-lucide="hotel" class="w-4 h-4"></i> 6大優選酒店</span>
+                <span class="flex items-center gap-1"><i data-lucide="compass" class="w-4 h-4"></i> 4大美學商圈</span>
+                <span class="flex items-center gap-1"><i data-lucide="utensils" class="w-4 h-4"></i> 精選美食與手信</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation Tabs for Mobile App Feel -->
+    <div class="grid grid-cols-5 bg-white p-1 rounded-xl shadow-sm mb-6 border border-slate-200/80 sticky top-2 z-50 md:relative md:top-0">
+        <button onclick="switchTab('routes')" id="btn-tab-routes" class="tab-btn flex flex-col items-center gap-1 py-2 text-xs font-medium text-emerald-700 bg-emerald-50 rounded-lg transition-all">
+            <i data-lucide="map-pin" class="w-5 h-5"></i>
+            <span class="hidden sm:inline">推薦路線</span><span class="sm:hidden">路線</span>
+        </button>
+        <button onclick="switchTab('hotels')" id="btn-tab-hotels" class="tab-btn flex flex-col items-center gap-1 py-2 text-xs font-medium text-slate-500 hover:text-slate-800 transition-all">
+            <i data-lucide="bed-double" class="w-5 h-5"></i>
+            <span class="hidden sm:inline">精選酒店</span><span class="sm:hidden">酒店</span>
+        </button>
+        <button onclick="switchTab('food')" id="btn-tab-food" class="tab-btn flex flex-col items-center gap-1 py-2 text-xs font-medium text-slate-500 hover:text-slate-800 transition-all">
+            <i data-lucide="utensils-cross" class="w-5 h-5"></i>
+            <span class="hidden sm:inline">美食打卡</span><span class="sm:hidden">美食</span>
+        </button>
+        <button onclick="switchTab('metro')" id="btn-tab-metro" class="tab-btn flex flex-col items-center gap-1 py-2 text-xs font-medium text-slate-500 hover:text-slate-800 transition-all">
+            <i data-lucide="subway" class="w-5 h-5"></i>
+            <span class="hidden sm:inline">軌道交通</span><span class="sm:hidden">地鐵</span>
+        </button>
+        <button onclick="switchTab('tools')" id="btn-tab-tools" class="tab-btn flex flex-col items-center gap-1 py-2 text-xs font-medium text-slate-500 hover:text-slate-800 transition-all">
+            <i data-lucide="sparkles" class="w-5 h-5"></i>
+            <span class="hidden sm:inline">出發準備</span><span class="sm:hidden">工具</span>
+        </button>
+    </div>
+
+    <!-- SECTION 1: ROUTES -->
+    <div id="tab-routes" class="tab-content block space-y-6">
+        <!-- Route Selector Banner -->
+        <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+                <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                    <i data-lucide="navigation" class="text-emerald-600 w-5 h-5"></i> 選擇你明天的入境口岸：
+                </h2>
+                <p class="text-sm text-slate-500 mt-1">根據你從香港出發下車的地點，我們提供兩套完美閉環、不繞路的精細路線。</p>
+            </div>
+            <div class="inline-flex rounded-lg p-1 bg-slate-100">
+                <button onclick="switchRoute('A')" id="btn-route-a" class="route-selector-btn px-4 py-2 text-sm font-semibold rounded-md shadow-sm bg-white text-emerald-800 transition-all">
+                    方案 A：羅湖口岸入境
+                </button>
+                <button onclick="switchRoute('B')" id="btn-route-b" class="route-selector-btn px-4 py-2 text-sm font-semibold rounded-md text-slate-600 hover:text-slate-900 transition-all">
+                    方案 B：福田口岸入境
+                </button>
+            </div>
+        </div>
+
+        <!-- ROUTE A CONTENT -->
+        <div id="route-content-a" class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <!-- Day 1 List -->
+            <div class="lg:col-span-6 space-y-4">
+                <div class="bg-emerald-900 text-white px-4 py-3 rounded-xl flex justify-between items-center shadow-sm">
+                    <span class="font-bold tracking-wide text-sm">第一天 (DAY 1) ‧ 經典商圈與食尚市集</span>
+                    <span class="bg-emerald-700 px-2 py-0.5 rounded text-xs">羅湖區為主</span>
+                </div>
+
+                <!-- Day 1 Step 1 -->
+                <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-100 relative overflow-hidden group hover:border-emerald-200 transition-all">
+                    <div class="absolute left-0 top-0 h-full w-1.5 bg-emerald-600"></div>
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-1 rounded">10:00 - 11:00</span>
+                        <span class="text-xs text-slate-400 flex items-center gap-1"><i data-lucide="check-circle" class="w-3.5 h-3.5"></i> 第一站</span>
+                    </div>
+                    <h3 class="text-base font-bold text-slate-900 mt-2 flex items-center gap-1.5">
+                        羅湖口岸過關 & 酒店寄存
+                    </h3>
+                    <p class="text-sm text-slate-600 mt-2">
+                        過關後步行至<strong>朗麗茲酒店</strong>（或其他羅湖口岸臨近酒店）寄存行李。卸下負重，輕鬆開啟大灣區週末旅程。
+                    </p>
+                    <div class="mt-3 bg-slate-50 p-2.5 rounded-lg text-xs text-slate-500 border border-slate-100 flex items-center gap-1.5">
+                        <i data-lucide="info" class="w-4 h-4 text-emerald-600 shrink-0"></i>
+                        <span><strong>貼心外賣</strong>：可先在酒店附近外賣一杯 <strong>阿嬤手作</strong> 或 <strong>茉莉奶白</strong>。</span>
+                    </div>
+                </div>
+
+                <!-- Day 1 Step 2 -->
+                <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-100 relative overflow-hidden group hover:border-emerald-200 transition-all">
+                    <div class="absolute left-0 top-0 h-full w-1.5 bg-emerald-600"></div>
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-1 rounded">11:30 - 14:00</span>
+                        <span class="text-xs text-slate-400 flex items-center gap-1"><i data-lucide="compass" class="w-3.5 h-3.5"></i> 行街午膳</span>
+                    </div>
+                    <h3 class="text-base font-bold text-slate-900 mt-2 flex items-center gap-1.5">
+                        KK Mall (京基百纳空间)
+                    </h3>
+                    <p class="text-sm text-slate-600 mt-2">
+                        避開正午烈日，地鐵1號線直達大劇院站。漫步精緻緊湊的金融區綜合體，可逛精品家品店 Nitori 與 blt 精品超市。
+                    </p>
+                    <div class="mt-3 grid grid-cols-2 gap-2 text-xs">
+                        <div class="bg-amber-50/50 p-2 rounded border border-amber-100">
+                            <span class="font-bold text-amber-800 block mb-0.5">推薦美食</span>
+                            <strong>外婆家</strong> (茶香雞) 或 <strong>南京大排檔</strong> (美齡粥)
+                        </div>
+                        <div class="bg-blue-50/50 p-2 rounded border border-blue-100">
+                            <span class="font-bold text-blue-800 block mb-0.5">交通指南</span>
+                            地鐵1號線大劇院站 B出口
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Day 1 Step 3 -->
+                <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-100 relative overflow-hidden group hover:border-emerald-200 transition-all">
+                    <div class="absolute left-0 top-0 h-full w-1.5 bg-emerald-600"></div>
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-1 rounded">14:30 - 17:00</span>
+                        <span class="text-xs text-slate-400 flex items-center gap-1"><i data-lucide="shopping-bag" class="w-3.5 h-3.5"></i> 美學市集</span>
+                    </div>
+                    <h3 class="text-base font-bold text-slate-900 mt-2">
+                        羅湖萬象食家 (Market Design)
+                    </h3>
+                    <p class="text-sm text-slate-600 mt-2">
+                        極具現代美學的「市集」創新購物中心。挑高鋼架玻璃中庭，可悠閒閒逛各種精緻餐廚器皿文創小店。
+                    </p>
+                    <div class="mt-3 grid grid-cols-2 gap-2 text-xs">
+                        <div class="bg-emerald-50/50 p-2 rounded border border-emerald-100">
+                            <span class="font-bold text-emerald-800 block mb-0.5">下午茶必選</span>
+                            <strong>蔻蔻椰</strong>(電椰水) 或 <strong>July tale</strong>可麗餅
+                        </div>
+                        <div class="bg-blue-50/50 p-2 rounded border border-blue-100">
+                            <span class="font-bold text-blue-800 block mb-0.5">地鐵引流</span>
+                            地鐵7號線筍崗站 A出口直達
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Day 1 Step 4 -->
+                <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-100 relative overflow-hidden group hover:border-emerald-200 transition-all">
+                    <div class="absolute left-0 top-0 h-full w-1.5 bg-emerald-600"></div>
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-1 rounded">17:30 - 20:30</span>
+                        <span class="text-xs text-slate-400 flex items-center gap-1"><i data-lucide="moon" class="w-3.5 h-3.5"></i> 霓虹夜色</span>
+                    </div>
+                    <h3 class="text-base font-bold text-slate-900 mt-2">
+                        水圍 1368 文化街區 (煙火晚餐)
+                    </h3>
+                    <p class="text-sm text-slate-600 mt-2">
+                        百年嶺南騎樓被改造成塗鴉街與小酒館，當夜幕低垂、七彩燈籠亮起，漫步在握手樓之間感受老深圳極具格調的夜市氛圍。
+                    </p>
+                    <div class="mt-3 bg-rose-50/80 p-2.5 rounded-lg text-xs text-rose-900 border border-rose-150">
+                        <span class="font-bold block mb-0.5">晚餐推薦</span>
+                        <strong>太豪七12年炭火燒雞</strong>（古法瓦缸脆皮烤雞配高壓鍋生蠔）或 <strong>水爲財糟粕醋火鍋</strong>。
+                    </div>
+                </div>
+            </div>
+
+            <!-- Day 2 List -->
+            <div class="lg:col-span-6 space-y-4">
+                <div class="bg-teal-900 text-white px-4 py-3 rounded-xl flex justify-between items-center shadow-sm">
+                    <span class="font-bold tracking-wide text-sm">第二天 (DAY 2) ‧ 福田中央綠谷與返港</span>
+                    <span class="bg-teal-700 px-2 py-0.5 rounded text-xs">福田區為主</span>
+                </div>
+
+                <!-- Day 2 Step 1 -->
+                <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-100 relative overflow-hidden group hover:border-teal-200 transition-all">
+                    <div class="absolute left-0 top-0 h-full w-1.5 bg-teal-600"></div>
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs font-bold text-teal-700 bg-teal-50 px-2 py-1 rounded">09:30 - 10:30</span>
+                        <span class="text-xs text-slate-400 flex items-center gap-1"><i data-lucide="coffee" class="w-3.5 h-3.5"></i> 晨光早餐</span>
+                    </div>
+                    <h3 class="text-base font-bold text-slate-900 mt-2">
+                        酒店悠閒早餐 & 退房
+                    </h3>
+                    <p class="text-sm text-slate-600 mt-2">
+                        在酒店享用高品質的自助早餐，退房後可將笨重行李先寄存在酒店，輕裝開啟第二天的行程。
+                    </p>
+                </div>
+
+                <!-- Day 2 Step 2 -->
+                <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-100 relative overflow-hidden group hover:border-teal-200 transition-all">
+                    <div class="absolute left-0 top-0 h-full w-1.5 bg-teal-600"></div>
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs font-bold text-teal-700 bg-teal-50 px-2 py-1 rounded">11:00 - 14:00</span>
+                        <span class="text-xs text-slate-400 flex items-center gap-1"><i data-lucide="camera" class="w-3.5 h-3.5"></i> 網紅打卡</span>
+                    </div>
+                    <h3 class="text-base font-bold text-slate-900 mt-2">
+                        深業上城 (UpperHills) LOFT彩色小鎮
+                    </h3>
+                    <p class="text-sm text-slate-600 mt-2">
+                        L3層由紅黃橙灰等幾何方塊建築組成的網紅彩色小鎮。通過生態廊橋橫跨城市綠肺，帶有強烈的都市鬆弛感，非常適合散步。
+                    </p>
+                    <div class="mt-3 grid grid-cols-2 gap-2 text-xs">
+                        <div class="bg-amber-50/50 p-2 rounded border border-amber-100">
+                            <span class="font-bold text-amber-800 block mb-0.5">必吃中膳</span>
+                            <strong>金鴨季</strong>(棗木烤鴨配櫻桃鵝肝) 或 <strong>榕意</strong>(米其林藤椒魚)
+                        </div>
+                        <div class="bg-blue-50/50 p-2 rounded border border-blue-100">
+                            <span class="font-bold text-blue-800 block mb-0.5">交通指引</span>
+                            地鐵10號線冬瓜嶺站 E出口直通
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Day 2 Step 3 -->
+                <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-100 relative overflow-hidden group hover:border-teal-200 transition-all">
+                    <div class="absolute left-0 top-0 h-full w-1.5 bg-teal-600"></div>
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs font-bold text-teal-700 bg-teal-50 px-2 py-1 rounded">14:30 - 16:30</span>
+                        <span class="text-xs text-slate-400 flex items-center gap-1"><i data-lucide="shopping-bag" class="w-3.5 h-3.5"></i> 綠谷漫步</span>
+                    </div>
+                    <h3 class="text-base font-bold text-slate-900 mt-2">
+                        領展中心城 (都市生態谷)
+                    </h3>
+                    <p class="text-sm text-slate-600 mt-2">
+                        位於福田CBD核心，採用「都市綠谷」下沉式中庭設計。四周被綠色階梯步道包圍，地下一層直通地鐵站，方便疲憊時歇腳。
+                    </p>
+                    <div class="mt-3 grid grid-cols-2 gap-2 text-xs">
+                        <div class="bg-emerald-50/50 p-2 rounded border border-emerald-100">
+                            <span class="font-bold text-emerald-800 block mb-0.5">下午茶推薦</span>
+                            <strong>SAANCI山池咖啡</strong> 或 <strong>千芋本鋪</strong> 手工芋圓
+                        </div>
+                        <div class="bg-blue-50/50 p-2 rounded border border-blue-100">
+                            <span class="font-bold text-blue-800 block mb-0.5">交通指引</span>
+                            地鐵1/4號線會展中心站 B出口直達
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Day 2 Step 4 -->
+                <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-100 relative overflow-hidden group hover:border-teal-200 transition-all">
+                    <div class="absolute left-0 top-0 h-full w-1.5 bg-teal-600"></div>
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs font-bold text-teal-700 bg-teal-50 px-2 py-1 rounded">16:45 - 17:30</span>
+                        <span class="text-xs text-slate-400 flex items-center gap-1"><i data-lucide="gift" class="w-3.5 h-3.5"></i> 伴手禮</span>
+                    </div>
+                    <h3 class="text-base font-bold text-slate-900 mt-2">
+                        伴手禮採購 & 高效返港
+                    </h3>
+                    <p class="text-sm text-slate-600 mt-2">
+                        在領展中心城地鐵入口處的 <strong>鮑師傅糕點</strong> 採購海苔肉松小貝和蛋黃酥。回到羅湖取行李，或直接在會展中心站搭4號線（僅2站路、9分鐘）直達福田口岸，避開晚高峰輕鬆返港。
+                    </p>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- ROUTE B CONTENT (HIDDEN BY DEFAULT) -->
+        <div id="route-content-b" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <!-- Day 1 List -->
+            <div class="lg:col-span-6 space-y-4">
+                <div class="bg-emerald-900 text-white px-4 py-3 rounded-xl flex justify-between items-center shadow-sm">
+                    <span class="font-bold tracking-wide text-sm">第一天 (DAY 1) ‧ 彩色小鎮與城中村夜市</span>
+                    <span class="bg-emerald-700 px-2 py-0.5 rounded text-xs">福田區為主</span>
+                </div>
+
+                <!-- Day 1 Step 1 -->
+                <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-100 relative overflow-hidden group hover:border-emerald-200 transition-all">
+                    <div class="absolute left-0 top-0 h-full w-1.5 bg-emerald-600"></div>
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-1 rounded">10:00 - 11:00</span>
+                        <span class="text-xs text-slate-400 flex items-center gap-1"><i data-lucide="check-circle" class="w-3.5 h-3.5"></i> 第一站</span>
+                    </div>
+                    <h3 class="text-base font-bold text-slate-900 mt-2">
+                        福田口岸過關 & 酒店寄存
+                    </h3>
+                    <p class="text-sm text-slate-600 mt-2">
+                        福田口岸過關後，步行5分鐘至<strong>希爾頓歡朋酒店</strong>或搭地鐵1站至<strong>皇岗城际酒店</strong>，辦理行李寄存，開始度假。
+                    </p>
+                </div>
+
+                <!-- Day 1 Step 2 -->
+                <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-100 relative overflow-hidden group hover:border-emerald-200 transition-all">
+                    <div class="absolute left-0 top-0 h-full w-1.5 bg-emerald-600"></div>
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-1 rounded">11:15 - 14:00</span>
+                        <span class="text-xs text-slate-400 flex items-center gap-1"><i data-lucide="camera" class="w-3.5 h-3.5"></i> 生態商圈</span>
+                    </div>
+                    <h3 class="text-base font-bold text-slate-900 mt-2">
+                        深業上城 (彩色小鎮漫步)
+                    </h3>
+                    <p class="text-sm text-slate-600 mt-2">
+                        福田口岸搭地鐵10號線直達冬瓜嶺站（僅4站、10分鐘）。慢步L3層彩色Loft街區，跨越公園廊橋俯瞰城市高樓景致。
+                    </p>
+                    <div class="mt-3 grid grid-cols-2 gap-2 text-xs">
+                        <div class="bg-amber-50/50 p-2 rounded border border-amber-100">
+                            <span class="font-bold text-amber-800 block mb-0.5">午膳推介</span>
+                            <strong>金鴨季</strong>(枣木烤鸭) 或 <strong>榕意</strong>(新派川菜)
+                        </div>
+                        <div class="bg-blue-50/50 p-2 rounded border border-blue-100">
+                            <span class="font-bold text-blue-800 block mb-0.5">交通優勢</span>
+                            地鐵10號線直達冬瓜嶺站E口
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Day 1 Step 3 -->
+                <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-100 relative overflow-hidden group hover:border-emerald-200 transition-all">
+                    <div class="absolute left-0 top-0 h-full w-1.5 bg-emerald-600"></div>
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-1 rounded">14:30 - 17:00</span>
+                        <span class="text-xs text-slate-400 flex items-center gap-1"><i data-lucide="coffee" class="w-3.5 h-3.5"></i> 下午茶</span>
+                    </div>
+                    <h3 class="text-base font-bold text-slate-900 mt-2">
+                        深業上城 露台文創與甜品
+                    </h3>
+                    <p class="text-sm text-slate-600 mt-2">
+                        午後陽光柔和時，逛一逛小鎮頂層的文創小店及 PHOTOWITH 復古照相館，在露台吹吹風，徹底放空。
+                    </p>
+                    <div class="mt-3 bg-slate-50 p-2 rounded text-xs text-slate-500 border border-slate-100">
+                        <strong>精選：</strong>在 <strong>Baker & Spice</strong> 享用歐陸风烘焙，或嘗試國潮 <strong>茅台冰淇淋</strong>。
+                    </div>
+                </div>
+
+                <!-- Day 1 Step 4 -->
+                <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-100 relative overflow-hidden group hover:border-emerald-200 transition-all">
+                    <div class="absolute left-0 top-0 h-full w-1.5 bg-emerald-600"></div>
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-1 rounded">17:30 - 20:30</span>
+                        <span class="text-xs text-slate-400 flex items-center gap-1"><i data-lucide="utensils" class="w-3.5 h-3.5"></i> 晚間饗宴</span>
+                    </div>
+                    <h3 class="text-base font-bold text-slate-900 mt-2">
+                        水圍 1368 嶺南風情夜市
+                    </h3>
+                    <p class="text-sm text-slate-600 mt-2">
+                        冬瓜嶺站搭10號線直達福民站。在嶺南青磚騎樓夜景中穿梭。感受老村改造的活力夜市。
+                    </p>
+                    <div class="mt-3 bg-rose-50/80 p-2.5 rounded-lg text-xs text-rose-900 border border-rose-150">
+                        <span class="font-bold block mb-0.5">晚餐推薦</span>
+                        <strong>潮汕大目牛肉火鍋</strong>（42年經典，極致鮮切脖仁、胸口朥）
+                    </div>
+                </div>
+            </div>
+
+            <!-- Day 2 List -->
+            <div class="lg:col-span-6 space-y-4">
+                <div class="bg-teal-900 text-white px-4 py-3 rounded-xl flex justify-between items-center shadow-sm">
+                    <span class="font-bold tracking-wide text-sm">第二天 (DAY 2) ‧ 精緻食尚市集與返港</span>
+                    <span class="bg-teal-700 px-2 py-0.5 rounded text-xs">福田+羅湖雙區</span>
+                </div>
+
+                <!-- Day 2 Step 1 -->
+                <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-100 relative overflow-hidden group hover:border-teal-200 transition-all">
+                    <div class="absolute left-0 top-0 h-full w-1.5 bg-teal-600"></div>
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs font-bold text-teal-700 bg-teal-50 px-2 py-1 rounded">09:30 - 10:30</span>
+                        <span class="text-xs text-slate-400 flex items-center gap-1"><i data-lucide="bed" class="w-3.5 h-3.5"></i> 舒適早晨</span>
+                    </div>
+                    <h3 class="text-base font-bold text-slate-900 mt-2">
+                        酒店早餐 & 悠閒辦理退房
+                    </h3>
+                    <p class="text-sm text-slate-600 mt-2">
+                        享受酒店新鮮健康的暖心自助早餐（如城際酒店備受讚譽的早餐）。退房後寄存行李。
+                    </p>
+                </div>
+
+                <!-- Day 2 Step 2 -->
+                <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-100 relative overflow-hidden group hover:border-teal-200 transition-all">
+                    <div class="absolute left-0 top-0 h-full w-1.5 bg-teal-600"></div>
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs font-bold text-teal-700 bg-teal-50 px-2 py-1 rounded">11:00 - 13:30</span>
+                        <span class="text-xs text-slate-400 flex items-center gap-1"><i data-lucide="sparkles" class="w-3.5 h-3.5"></i> 美食天堂</span>
+                    </div>
+                    <h3 class="text-base font-bold text-slate-900 mt-2">
+                        萬象食家 (極致餐飲與盒馬鮮生)
+                    </h3>
+                    <p class="text-sm text-slate-600 mt-2">
+                        福民站搭7號線直達筍崗站 A出口。陽光灑落的鋼結構中庭，匯聚了深圳最高品質的創意日料及烘焙，負二層是大型盒馬鮮生。
+                    </p>
+                    <div class="mt-3 grid grid-cols-2 gap-2 text-xs">
+                        <div class="bg-amber-50/50 p-2 rounded border border-amber-100">
+                            <span class="font-bold text-amber-800 block mb-0.5">中膳極力推薦</span>
+                            <strong>膽道·海膽料理</strong> (現剖生海膽丼) 或 <strong>百分和食</strong> (流心鵝肝厚切漢堡飯)
+                        </div>
+                        <div class="bg-blue-50/50 p-2 rounded border border-blue-100">
+                            <span class="font-bold text-blue-800 block mb-0.5">交通便利</span>
+                            地鐵7號線筍崗站直達
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Day 2 Step 3 -->
+                <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-100 relative overflow-hidden group hover:border-teal-200 transition-all">
+                    <div class="absolute left-0 top-0 h-full w-1.5 bg-teal-600"></div>
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs font-bold text-teal-700 bg-teal-50 px-2 py-1 rounded">14:00 - 16:30</span>
+                        <span class="text-xs text-slate-400 flex items-center gap-1"><i data-lucide="coffee" class="w-3.5 h-3.5"></i> 伴手禮</span>
+                    </div>
+                    <h3 class="text-base font-bold text-slate-900 mt-2">
+                        領展中心城 (都市生態綠谷)
+                    </h3>
+                    <p class="text-sm text-slate-600 mt-2">
+                        搭7號線轉4號線至會展中心站。在寬闊的下沉綠意花園內，喝杯茶，放鬆在深圳行街一整天的腳步。
+                    </p>
+                    <div class="mt-3 grid grid-cols-2 gap-2 text-xs">
+                        <div class="bg-emerald-50/50 p-2 rounded border border-emerald-100">
+                            <span class="font-bold text-emerald-800 block mb-0.5">下午茶</span>
+                            在 <strong>千芋本鋪</strong> 享用手工芋圓甜品，或外帶一杯 <strong>茉莉奶白</strong>
+                        </div>
+                        <div class="bg-indigo-50/50 p-2 rounded border border-indigo-100">
+                            <span class="font-bold text-indigo-800 block mb-0.5">手信選購</span>
+                            地鐵入口 <strong>鮑師傅</strong> 採購海苔肉松小貝
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Day 2 Step 4 -->
+                <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-100 relative overflow-hidden group hover:border-teal-200 transition-all">
+                    <div class="absolute left-0 top-0 h-full w-1.5 bg-teal-600"></div>
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs font-bold text-teal-700 bg-teal-50 px-2 py-1 rounded">16:45 ~ </span>
+                        <span class="text-xs text-slate-400 flex items-center gap-1"><i data-lucide="log-out" class="w-3.5 h-3.5"></i> 返港</span>
+                    </div>
+                    <h3 class="text-base font-bold text-slate-900 mt-2">
+                        取回行李 & 順暢通關
+                    </h3>
+                    <p class="text-sm text-slate-600 mt-2">
+                        回到福田口岸附近酒店提取寄存的行李。避開過關人流高峰（建議17:30前），從福田口岸輕鬆步行過關回到香港。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 2: HOTELS -->
+    <div id="tab-hotels" class="tab-content hidden space-y-6">
+        <!-- Hotel Title Filter -->
+        <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div>
+                <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                    <i data-lucide="bed-double" class="text-emerald-600 w-5 h-5"></i> 羅湖/福田口岸優質酒店比選
+                </h2>
+                <p class="text-sm text-slate-500 mt-1">均具備極高的地鐵連接度、高設計美學，性價比極佳。</p>
+            </div>
+            <!-- Hotel Filter Tab -->
+            <div class="flex rounded-md bg-slate-100 p-1 text-xs font-semibold">
+                <button onclick="filterHotels('all')" id="btn-hotel-all" class="hotel-filter-btn px-3 py-1.5 rounded-md bg-white text-emerald-800 shadow-sm transition-all">全部</button>
+                <button onclick="filterHotels('luohu')" id="btn-hotel-luohu" class="hotel-filter-btn px-3 py-1.5 rounded-md text-slate-600 hover:text-slate-900 transition-all">羅湖口岸</button>
+                <button onclick="filterHotels('futian')" id="btn-hotel-futian" class="hotel-filter-btn px-3 py-1.5 rounded-md text-slate-600 hover:text-slate-900 transition-all">福田口岸</button>
+            </div>
+        </div>
+
+        <!-- Hotels Cards Grid -->
+        <div id="hotels-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Hotel 1 -->
+            <div class="hotel-card bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden hover:shadow-md hover:border-emerald-200 transition-all flex flex-col justify-between" data-port="luohu" data-price="415">
+                <div>
+                    <div class="h-48 bg-slate-200 relative overflow-hidden">
+                        <img src="https://placehold.co/600x400/064e3b/ffffff?text=Lanyaz+Hotel+Luohu" alt="朗麗茲酒店" class="w-full h-full object-cover">
+                        <span class="absolute top-3 left-3 bg-emerald-600 text-white text-xs font-bold px-2.5 py-1 rounded-full shadow">2023年全新</span>
+                        <span class="absolute bottom-3 right-3 bg-black/60 backdrop-blur-sm text-white text-xs px-2 py-1 rounded">羅湖口岸</span>
+                    </div>
+                    <div class="p-5">
+                        <div class="flex justify-between items-start">
+                            <h3 class="text-base font-bold text-slate-900">朗麗茲酒店（深圳羅湖口岸人民南站店）</h3>
+                        </div>
+                        <p class="text-xs text-slate-500 mt-1 flex items-center gap-1"><i data-lucide="map-pin" class="w-3.5 h-3.5"></i> 步行至地鐵9號線人民南站1分鐘</p>
+                        <p class="text-sm text-slate-600 mt-3 line-clamp-3">
+                            現代輕奢時尚風格，客房設備極新。備有智能控制、自助洗衣房。與各核心商圈的地鐵連接效率極高，非常適合高通關效率要求的旅客。
+                        </p>
+                    </div>
+                </div>
+                <div class="p-5 border-t border-slate-50 bg-slate-50/50 flex justify-between items-center">
+                    <div>
+                        <span class="text-xs text-slate-400">參考價格 / 晚</span>
+                        <div class="text-lg font-bold text-emerald-800">~ HKD 415 <span class="text-xs font-normal text-slate-400">起</span></div>
+                    </div>
+                    <span class="text-xs bg-emerald-50 text-emerald-700 font-semibold px-2 py-1 rounded">商務精緻款</span>
+                </div>
+            </div>
+
+            <!-- Hotel 2 -->
+            <div class="hotel-card bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden hover:shadow-md hover:border-emerald-200 transition-all flex flex-col justify-between" data-port="luohu" data-price="700">
+                <div>
+                    <div class="h-48 bg-slate-200 relative overflow-hidden">
+                        <img src="https://placehold.co/600x400/042f2e/ffffff?text=Shangri-La+Luohu" alt="深圳香格里拉大酒店" class="w-full h-full object-cover">
+                        <span class="absolute top-3 left-3 bg-amber-600 text-white text-xs font-bold px-2.5 py-1 rounded-full shadow">五星經典</span>
+                        <span class="absolute bottom-3 right-3 bg-black/60 backdrop-blur-sm text-white text-xs px-2 py-1 rounded">羅湖口岸</span>
+                    </div>
+                    <div class="p-5">
+                        <div class="flex justify-between items-start">
+                            <h3 class="text-base font-bold text-slate-900">深圳香格里拉大酒店</h3>
+                        </div>
+                        <p class="text-xs text-slate-500 mt-1 flex items-center gap-1"><i data-lucide="map-pin" class="w-3.5 h-3.5"></i> 羅湖口岸步行5分鐘</p>
+                        <p class="text-sm text-slate-600 mt-3 line-clamp-3">
+                            經典老牌五星級奢華酒店。設有大型戶外泳池、健身房及兒童遊樂場。高層客房可飽覽深港兩地一線景觀，極致舒適，非常適合休閒度假。
+                        </p>
+                    </div>
+                </div>
+                <div class="p-5 border-t border-slate-50 bg-slate-50/50 flex justify-between items-center">
+                    <div>
+                        <span class="text-xs text-slate-400">參考價格 / 晚</span>
+                        <div class="text-lg font-bold text-emerald-800">~ HKD 650 <span class="text-xs font-normal text-slate-400">起</span></div>
+                    </div>
+                    <span class="text-xs bg-amber-50 text-amber-800 font-semibold px-2 py-1 rounded">經典品牌</span>
+                </div>
+            </div>
+
+            <!-- Hotel 3 -->
+            <div class="hotel-card bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden hover:shadow-md hover:border-emerald-200 transition-all flex flex-col justify-between" data-port="luohu" data-price="460">
+                <div>
+                    <div class="h-48 bg-slate-200 relative overflow-hidden">
+                        <img src="https://placehold.co/600x400/0f172a/ffffff?text=Forum+Hotel+Luohu" alt="富臨大酒店" class="w-full h-full object-cover">
+                        <span class="absolute top-3 left-3 bg-slate-600 text-white text-xs font-bold px-2.5 py-1 rounded-full shadow">超高性價比</span>
+                        <span class="absolute bottom-3 right-3 bg-black/60 backdrop-blur-sm text-white text-xs px-2 py-1 rounded">羅湖口岸</span>
+                    </div>
+                    <div class="p-5">
+                        <div class="flex justify-between items-start">
+                            <h3 class="text-base font-bold text-slate-900">深圳富臨大酒店</h3>
+                        </div>
+                        <p class="text-xs text-slate-500 mt-1 flex items-center gap-1"><i data-lucide="map-pin" class="w-3.5 h-3.5"></i> 人行天橋直達羅湖口岸 5分鐘</p>
+                        <p class="text-sm text-slate-600 mt-3 line-clamp-3">
+                            老牌五星級商務酒店，客房能遠眺深圳河與香港山景。房間寬敞、整潔度佳，通關極為便利，預算有限但注重傳統星級服務者的首選。
+                        </p>
+                    </div>
+                </div>
+                <div class="p-5 border-t border-slate-50 bg-slate-50/50 flex justify-between items-center">
+                    <div>
+                        <span class="text-xs text-slate-400">參考價格 / 晚</span>
+                        <div class="text-lg font-bold text-emerald-800">~ HKD 460 <span class="text-xs font-normal text-slate-400">起</span></div>
+                    </div>
+                    <span class="text-xs bg-blue-50 text-blue-700 font-semibold px-2 py-1 rounded">性價之選</span>
+                </div>
+            </div>
+
+            <!-- Hotel 4 -->
+            <div class="hotel-card bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden hover:shadow-md hover:border-emerald-200 transition-all flex flex-col justify-between" data-port="futian" data-price="770">
+                <div>
+                    <div class="h-48 bg-slate-200 relative overflow-hidden">
+                        <img src="https://placehold.co/600x400/1e3a8a/ffffff?text=Hampton+by+Hilton" alt="希爾頓歡朋酒店" class="w-full h-full object-cover">
+                        <span class="absolute top-3 left-3 bg-indigo-600 text-white text-xs font-bold px-2.5 py-1 rounded-full shadow">國際連鎖保障</span>
+                        <span class="absolute bottom-3 right-3 bg-black/60 backdrop-blur-sm text-white text-xs px-2 py-1 rounded">福田口岸</span>
+                    </div>
+                    <div class="p-5">
+                        <div class="flex justify-between items-start">
+                            <h3 class="text-base font-bold text-slate-900">深圳福田口岸希爾頓歡朋酒店</h3>
+                        </div>
+                        <p class="text-xs text-slate-500 mt-1 flex items-center gap-1"><i data-lucide="map-pin" class="w-3.5 h-3.5"></i> 福田口岸/福民地鐵站步行5分鐘</p>
+                        <p class="text-sm text-slate-600 mt-3 line-clamp-3">
+                            希爾頓旗下中高端連鎖品牌。全房型智能客房控制，配有親切高品質服務。房費內直接包含了豐盛的高品質雙人自助早餐，入住非常省心。
+                        </p>
+                    </div>
+                </div>
+                <div class="p-5 border-t border-slate-50 bg-slate-50/50 flex justify-between items-center">
+                    <div>
+                        <span class="text-xs text-slate-400">參考價格 / 晚</span>
+                        <div class="text-lg font-bold text-emerald-800">~ HKD 770 <span class="text-xs font-normal text-slate-400">起</span></div>
+                    </div>
+                    <span class="text-xs bg-indigo-50 text-indigo-700 font-semibold px-2 py-1 rounded">高品質連鎖</span>
+                </div>
+            </div>
+
+            <!-- Hotel 5 -->
+            <div class="hotel-card bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden hover:shadow-md hover:border-emerald-200 transition-all flex flex-col justify-between" data-port="futian" data-price="760">
+                <div>
+                    <div class="h-48 bg-slate-200 relative overflow-hidden">
+                        <img src="https://placehold.co/600x400/030712/ffffff?text=Intercity+Hotel+Futian" alt="皇崗城際酒店" class="w-full h-full object-cover">
+                        <span class="absolute top-3 left-3 bg-neutral-850 text-white text-xs font-bold px-2.5 py-1 rounded-full shadow">德系現代設計</span>
+                        <span class="absolute bottom-3 right-3 bg-black/60 backdrop-blur-sm text-white text-xs px-2 py-1 rounded">福田口岸</span>
+                    </div>
+                    <div class="p-5">
+                        <div class="flex justify-between items-start">
+                            <h3 class="text-base font-bold text-slate-900">深圳福田皇崗城際酒店</h3>
+                        </div>
+                        <p class="text-xs text-slate-500 mt-1 flex items-center gap-1"><i data-lucide="map-pin" class="w-3.5 h-3.5"></i> 地鐵福民站/皇崗村站 步行3分鐘</p>
+                        <p class="text-sm text-slate-600 mt-3 line-clamp-3">
+                            德系極簡奢華設計風格，隔音效果堪稱一流。大堂氣氛極佳，提供高科技智能化入住。**最貼心亮點**：每晚9:30後向住客免費提供熱呼呼的暖胃宵夜粥品。
+                        </p>
+                    </div>
+                </div>
+                <div class="p-5 border-t border-slate-50 bg-slate-50/50 flex justify-between items-center">
+                    <div>
+                        <span class="text-xs text-slate-400">參考價格 / 晚</span>
+                        <div class="text-lg font-bold text-emerald-800">~ HKD 760 <span class="text-xs font-normal text-slate-400">起</span></div>
+                    </div>
+                    <span class="text-xs bg-slate-100 text-slate-800 font-semibold px-2 py-1 rounded">都市中產最愛</span>
+                </div>
+            </div>
+
+            <!-- Hotel 6 -->
+            <div class="hotel-card bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden hover:shadow-md hover:border-emerald-200 transition-all flex flex-col justify-between" data-port="futian" data-price="462">
+                <div>
+                    <div class="h-48 bg-slate-200 relative overflow-hidden">
+                        <img src="https://placehold.co/600x400/065f46/ffffff?text=Huiyu+Hotel" alt="薈語酒店" class="w-full h-full object-cover">
+                        <span class="absolute top-3 left-3 bg-teal-600 text-white text-xs font-bold px-2.5 py-1 rounded-full shadow">綠意美學</span>
+                        <span class="absolute bottom-3 right-3 bg-black/60 backdrop-blur-sm text-white text-xs px-2 py-1 rounded">福田口岸</span>
+                    </div>
+                    <div class="p-5">
+                        <div class="flex justify-between items-start">
+                            <h3 class="text-base font-bold text-slate-900">薈語酒店（深圳福田口岸會展中心店）</h3>
+                        </div>
+                        <p class="text-xs text-slate-500 mt-1 flex items-center gap-1"><i data-lucide="map-pin" class="w-3.5 h-3.5"></i> 地鐵3號線石廈站 步行5分鐘</p>
+                        <p class="text-sm text-slate-600 mt-3 line-clamp-3">
+                            主打「綠意系」自然美學。大堂擁有大面積落地玻璃、真实茂密的綠植景觀與舒緩香氛。極具藝術美感，深受情侶、年輕文青群體熱捧。
+                        </p>
+                    </div>
+                </div>
+                <div class="p-5 border-t border-slate-50 bg-slate-50/50 flex justify-between items-center">
+                    <div>
+                        <span class="text-xs text-slate-400">參考價格 / 晚</span>
+                        <div class="text-lg font-bold text-emerald-800">~ HKD 462 <span class="text-xs font-normal text-slate-400">起</span></div>
+                    </div>
+                    <span class="text-xs bg-teal-50 text-teal-700 font-semibold px-2 py-1 rounded">網紅設計感</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 3: FOOD & SOUVENIR -->
+    <div id="tab-food" class="tab-content hidden space-y-6">
+        <!-- Main Food Categories -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <!-- Gourmet Cards (Left Column) -->
+            <div class="lg:col-span-8 space-y-6">
+                <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-100">
+                    <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2 mb-4">
+                        <i data-lucide="utensils" class="text-amber-500 w-5 h-5"></i> 行程最受好評：四大美學商圈美食大公開
+                    </h2>
+
+                    <!-- Food Tabs -->
+                    <div class="flex gap-2 overflow-x-auto pb-3 border-b border-slate-100 hide-scrollbar">
+                        <button onclick="switchFoodTab('upper')" id="btn-food-upper" class="food-tab-btn shrink-0 text-xs font-semibold px-3 py-1.5 rounded-full bg-emerald-800 text-white transition-all">深業上城 (彩色小鎮)</button>
+                        <button onclick="switchFoodTab('mixc')" id="btn-food-mixc" class="food-tab-btn shrink-0 text-xs font-semibold px-3 py-1.5 rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 transition-all">萬象食家 (筍崗市集)</button>
+                        <button onclick="switchFoodTab('shuiwei')" id="btn-food-shuiwei" class="food-tab-btn shrink-0 text-xs font-semibold px-3 py-1.5 rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 transition-all">水圍 1368 文化街区</button>
+                    </div>
+
+                    <!-- UpperHills Food Content -->
+                    <div id="food-content-upper" class="food-category-content block mt-4 space-y-4">
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 flex flex-col md:flex-row gap-4">
+                            <div class="md:w-1/3">
+                                <h4 class="font-bold text-slate-900 text-base">金鴨季·北京烤鴨</h4>
+                                <span class="bg-emerald-50 text-emerald-800 text-xs px-2 py-0.5 rounded mt-1 inline-block">招牌果木烤鴨</span>
+                                <p class="text-xs text-slate-500 mt-2">人均：約 ¥150-180</p>
+                            </div>
+                            <div class="md:w-2/3 text-sm text-slate-600 space-y-2">
+                                <p>採用優質鴨源，在半開放式烤爐內以<strong>棗木煙熏烤製</strong>，烤鴨外皮呈現誘人棗紅色，酥脆無比，鴨肉鮮嫩多汁帶有淡淡果香。</p>
+                                <p class="text-xs bg-amber-50 text-amber-900 p-2 rounded-lg border border-amber-100">
+                                    <strong>必點推薦：</strong> 招牌果木烤鴨、金橘櫻桃鵝肝（外形如水果，口感如絲綢綿密）。
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 flex flex-col md:flex-row gap-4">
+                            <div class="md:w-1/3">
+                                <h4 class="font-bold text-slate-900 text-base">榕意·新派川菜</h4>
+                                <span class="bg-amber-50 text-amber-800 text-xs px-2 py-0.5 rounded mt-1 inline-block">米其林指南推介</span>
+                                <p class="text-xs text-slate-500 mt-2">人均：約 ¥120</p>
+                            </div>
+                            <div class="md:w-2/3 text-sm text-slate-600 space-y-2">
+                                <p>主打「輕油、減鹽、重鮮」的新派川菜。一改傳統川菜的油膩，展現現代雅致的口感與美學。</p>
+                                <p class="text-xs bg-amber-50 text-amber-900 p-2 rounded-lg border border-amber-100">
+                                    <strong>必點推薦：</strong> 榕意藤椒魚（精選無刺深海魚，湯底清爽麻香，魚肉嫩滑）、靈魂豬油炒飯。
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- MixC Food Content -->
+                    <div id="food-content-mixc" class="food-category-content hidden mt-4 space-y-4">
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 flex flex-col md:flex-row gap-4">
+                            <div class="md:w-1/3">
+                                <h4 class="font-bold text-slate-900 text-base">膽道·海膽料理專門店</h4>
+                                <span class="bg-orange-50 text-orange-800 text-xs px-2 py-0.5 rounded mt-1 inline-block">海膽控必去</span>
+                                <p class="text-xs text-slate-500 mt-2">人均：約 ¥220</p>
+                            </div>
+                            <div class="md:w-2/3 text-sm text-slate-600 space-y-2">
+                                <p>提供世界多個頂級產區的高品質生鮮海膽。口感鮮甜肥美，不用多餘調料，入口即化。</p>
+                                <p class="text-xs bg-amber-50 text-amber-900 p-2 rounded-lg border border-amber-100">
+                                    <strong>必點推薦：</strong> 招牌海膽拼盤、流心溫泉蛋海膽丼飯（海膽與鮮蛋液和米飯完美交融）。
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 flex flex-col md:flex-row gap-4">
+                            <div class="md:w-1/3">
+                                <h4 class="font-bold text-slate-900 text-base">百分和食創意日本料理</h4>
+                                <span class="bg-blue-50 text-blue-800 text-xs px-2 py-0.5 rounded mt-1 inline-block">流心鵝肝漢堡飯</span>
+                                <p class="text-xs text-slate-500 mt-2">人均：約 ¥110</p>
+                            </div>
+                            <div class="md:w-2/3 text-sm text-slate-600 space-y-2">
+                                <p>極具創意的日式簡餐代表，網紅打卡常客。將頂級食材融合新派醬汁。</p>
+                                <p class="text-xs bg-amber-50 text-amber-900 p-2 rounded-lg border border-amber-100">
+                                    <strong>必點推薦：</strong> 流心鵝肝厚切和牛漢堡飯（戳破溫泉蛋，流沙浸透肥厚鵝肝與牛肉餅，一口爆滿足）。
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Shuiwei Food Content -->
+                    <div id="food-content-shuiwei" class="food-category-content hidden mt-4 space-y-4">
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 flex flex-col md:flex-row gap-4">
+                            <div class="md:w-1/3">
+                                <h4 class="font-bold text-slate-900 text-base">太豪七12年炭火燒雞</h4>
+                                <span class="bg-rose-50 text-rose-800 text-xs px-2 py-0.5 rounded mt-1 inline-block">隱世城中村排檔</span>
+                                <p class="text-xs text-slate-500 mt-2">人均：約 ¥95</p>
+                            </div>
+                            <div class="md:w-2/3 text-sm text-slate-600 space-y-2">
+                                <p>大排檔式的氛圍，煙火氣極濃。採用傳統荔枝木炭火在瓦缸中密閉烘烤，逼出油脂，牢牢鎖住肉汁。</p>
+                                <p class="text-xs bg-amber-50 text-amber-900 p-2 rounded-lg border border-amber-100">
+                                    <strong>必點推薦：</strong> 古法瓦缸脆皮烤雞（皮脆如玻璃，咬下爆汁）、高壓鍋生蠔。
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 flex flex-col md:flex-row gap-4">
+                            <div class="md:w-1/3">
+                                <h4 class="font-bold text-slate-900 text-base">潮汕大目牛肉火鍋</h4>
+                                <span class="bg-red-50 text-red-800 text-xs px-2 py-0.5 rounded mt-1 inline-block">42年傳統老牌</span>
+                                <p class="text-xs text-slate-500 mt-2">人均：約 ¥140</p>
+                            </div>
+                            <div class="md:w-2/3 text-sm text-slate-600 space-y-2">
+                                <p>深圳人吃火鍋的代表。自建潮汕黃牛供應鏈，每天多次鮮宰送到，由老師傅在檔口前現切，確保鮮度。</p>
+                                <p class="text-xs bg-amber-50 text-amber-900 p-2 rounded-lg border border-amber-100">
+                                    <strong>必點推薦：</strong> 特級脖仁（雪花分布細緻）、胸口朥（爽脆不油膩）、手捶爆汁牛肉丸。
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hand Souvenir Shopping List (Right Column) -->
+            <div class="lg:col-span-4 space-y-6">
+                <!-- Interactive Shopping Checklist -->
+                <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-100">
+                    <h3 class="text-base font-bold text-slate-900 flex items-center gap-1.5 mb-3">
+                        <i data-lucide="shopping-cart" class="text-emerald-600 w-5 h-5"></i> 互動返港手信/美食打卡清單
+                    </h3>
+                    <p class="text-xs text-slate-500 mb-4">點擊下方按鈕勾選，打卡狀態會永久保存在你的手機裏，方便行街時對照！</p>
+
+                    <div class="space-y-3">
+                        <label class="flex items-start gap-2.5 p-2 rounded hover:bg-slate-50 transition-colors cursor-pointer">
+                            <input type="checkbox" id="chk-bao" onchange="toggleCheck('chk-bao')" class="mt-1 rounded text-emerald-600 focus:ring-emerald-500 w-4 h-4">
+                            <div>
+                                <span class="font-semibold text-sm text-slate-800">鮑師傅·海苔肉松小貝</span>
+                                <p class="text-xs text-slate-500">領展中心城地鐵入口。蛋糕體輕盈，外面厚裹海苔肉松，裡面爆漿沙拉醬，人手一袋必備手信。</p>
+                            </div>
+                        </label>
+
+                        <label class="flex items-start gap-2.5 p-2 rounded hover:bg-slate-50 transition-colors cursor-pointer">
+                            <input type="checkbox" id="chk-ama" onchange="toggleCheck('chk-ama')" class="mt-1 rounded text-emerald-600 focus:ring-emerald-500 w-4 h-4">
+                            <div>
+                                <span class="font-semibold text-sm text-slate-800">阿嬤手作·特色手作茶飲</span>
+                                <p class="text-xs text-slate-500">秉承古法手工熬煮食材。招牌打糯米、龍眼茶、有機厚鮮奶。味道極具誠意。</p>
+                            </div>
+                        </label>
+
+                        <label class="flex items-start gap-2.5 p-2 rounded hover:bg-slate-50 transition-colors cursor-pointer">
+                            <input type="checkbox" id="chk-moly" onchange="toggleCheck('chk-moly')" class="mt-1 rounded text-emerald-600 focus:ring-emerald-500 w-4 h-4">
+                            <div>
+                                <span class="font-semibold text-sm text-slate-800">茉莉奶白·清爽新茶飲</span>
+                                <p class="text-xs text-slate-500">主打茉莉花香的純淨鮮奶茶。口感輕盈不膩，國潮風包裝極為好看，行街必備。</p>
+                            </div>
+                        </label>
+
+                        <label class="flex items-start gap-2.5 p-2 rounded hover:bg-slate-50 transition-colors cursor-pointer">
+                            <input type="checkbox" id="chk-hema" onchange="toggleCheck('chk-hema')" class="mt-1 rounded text-emerald-600 focus:ring-emerald-500 w-4 h-4">
+                            <div>
+                                <span class="font-semibold text-sm text-slate-800">盒馬鮮生·水果零食</span>
+                                <p class="text-xs text-slate-500">萬象食家負二層。可瘋狂採購內地高性價比陽光玫瑰青提、各色零食小吃帶回香港。</p>
+                            </div>
+                        </label>
+
+                        <label class="flex items-start gap-2.5 p-2 rounded hover:bg-slate-50 transition-colors cursor-pointer">
+                            <input type="checkbox" id="chk-blue" onchange="toggleCheck('chk-blue')" class="mt-1 rounded text-emerald-600 focus:ring-emerald-500 w-4 h-4">
+                            <div>
+                                <span class="font-semibold text-sm text-slate-800">Blueglass·活性益生菌酸奶</span>
+                                <p class="text-xs text-slate-500">「酸奶界愛馬仕」。高顏值分層健康酸奶，添加膠原蛋白、牛油果，深受女生喜愛。</p>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 4: METRO MAP -->
+    <div id="tab-metro" class="tab-content hidden space-y-6">
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+            <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2 mb-2">
+                <i data-lucide="subway" class="text-emerald-600 w-5 h-5"></i> 雙軌道口岸「美學商圈地鐵鏈接網」
+            </h2>
+            <p class="text-sm text-slate-500 mb-6">我們精選的路線在地理上極其高效，地鐵均可在20分鐘內直達核心點，免去奔波之苦。</p>
+
+            <!-- Visual Map Simulation Container -->
+            <div class="border border-slate-150 rounded-xl p-4 md:p-6 bg-slate-900 text-white overflow-x-auto relative">
+                <!-- Outer limits wrapper -->
+                <div class="min-w-[650px] relative py-8 px-4">
+                    <!-- Lines Drawing -->
+                    <!-- Line 10 (Orange-ish Yellow) -->
+                    <div class="absolute top-[60px] left-[50px] right-[50px] h-1.5 bg-yellow-500 rounded"></div>
+                    <!-- Line 7 (Dark Blue/Teal) -->
+                    <div class="absolute top-[140px] left-[50px] right-[50px] h-1.5 bg-teal-500 rounded"></div>
+                    <!-- Line 4 (Red) -->
+                    <div class="absolute top-[50px] bottom-[50px] left-[200px] w-1.5 bg-red-500 rounded"></div>
+                    <!-- Line 1 (Green) -->
+                    <div class="absolute top-[220px] left-[50px] right-[50px] h-1.5 bg-emerald-500 rounded"></div>
+
+                    <!-- Stations Nodes / Labels -->
+
+                    <!-- Line 10: Futian Port -> Donggualing -->
+                    <div class="absolute top-[50px] left-[70px] flex flex-col items-center">
+                        <div class="w-6 h-6 rounded-full bg-yellow-500 border-4 border-white flex items-center justify-center text-[10px] text-slate-900 font-bold">10</div>
+                        <span class="text-xs font-semibold mt-1">福田口岸 (起點)</span>
+                    </div>
+
+                    <div class="absolute top-[50px] left-[320px] flex flex-col items-center">
+                        <div class="w-6 h-6 rounded-full bg-yellow-500 border-4 border-white flex items-center justify-center text-[10px] text-slate-900 font-bold">10</div>
+                        <span class="text-xs font-semibold mt-1 text-yellow-300">冬瓜嶺站 (深業上城)</span>
+                    </div>
+
+                    <!-- Line 7: Sungang & Fumin -->
+                    <div class="absolute top-[130px] left-[480px] flex flex-col items-center">
+                        <div class="w-6 h-6 rounded-full bg-teal-500 border-4 border-white flex items-center justify-center text-[10px] text-slate-900 font-bold">7</div>
+                        <span class="text-xs font-semibold mt-1 text-teal-300">筍崗站 (萬象食家)</span>
+                    </div>
+
+                    <!-- Fumin Junction (Intersection 10, 7, 4) -->
+                    <div class="absolute top-[130px] left-[200px] flex flex-col items-center z-10">
+                        <div class="w-8 h-8 rounded-full bg-white border-4 border-teal-500 flex items-center justify-center text-[11px] text-slate-900 font-extrabold shadow-lg">轉</div>
+                        <span class="text-xs font-bold mt-1 text-teal-200">福民站 (水圍1368)</span>
+                        <span class="text-[9px] text-slate-400">4 / 7 / 10 號線樞紐</span>
+                    </div>
+
+                    <!-- Convention Center (Intersection 1 & 4) -->
+                    <div class="absolute top-[210px] left-[200px] flex flex-col items-center z-10">
+                        <div class="w-8 h-8 rounded-full bg-white border-4 border-emerald-500 flex items-center justify-center text-[11px] text-slate-900 font-extrabold shadow-lg">轉</div>
+                        <span class="text-xs font-bold mt-1 text-emerald-200">會展中心站 (領展中心城)</span>
+                        <span class="text-[9px] text-slate-400">1 / 4 號線樞紐</span>
+                    </div>
+
+                    <!-- Line 1: DaJuYuan -->
+                    <div class="absolute top-[210px] left-[480px] flex flex-col items-center">
+                        <div class="w-6 h-6 rounded-full bg-emerald-500 border-4 border-white flex items-center justify-center text-[10px] text-slate-900 font-bold">1</div>
+                        <span class="text-xs font-semibold mt-1 text-emerald-300">大劇院站 (KK Mall)</span>
+                    </div>
+
+                    <div class="absolute top-[210px] left-[590px] flex flex-col items-center">
+                        <div class="w-6 h-6 rounded-full bg-emerald-500 border-4 border-white flex items-center justify-center text-[10px] text-slate-900 font-bold">1</div>
+                        <span class="text-xs font-semibold mt-1">羅湖站 (起點)</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Transit Tips List -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6 text-sm text-slate-600">
+                <div class="p-4 rounded-xl bg-emerald-50 border border-emerald-100">
+                    <span class="font-bold text-emerald-800 flex items-center gap-1.5 mb-1">
+                        <i data-lucide="compass" class="w-4 h-4"></i> 地鐵10號線「黃金樞紐」
+                    </span>
+                    <p class="text-xs leading-relaxed">
+                        從<strong>福田口岸</strong>過關後，地鐵10號線直達冬瓜嶺（深業上城），僅需4站（10分鐘）。極速進入幽靜美學空間。
+                    </p>
+                </div>
+                <div class="p-4 rounded-xl bg-teal-50 border border-teal-100">
+                    <span class="font-bold text-teal-800 flex items-center gap-1.5 mb-1">
+                        <i data-lucide="utensils" class="w-4 h-4"></i> 地鐵7號線「美食專線」
+                    </span>
+                    <p class="text-xs leading-relaxed">
+                        一線貫穿。東連<strong>萬象食家</strong>（筍崗站），西接<strong>水圍1368</strong>（福民站）。極致餐飲美味轉瞬即達。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 5: TOOLS & PREP -->
+    <div id="tab-tools" class="tab-content hidden space-y-6">
+        <!-- Interactive Budget Calculator -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <!-- Budget Tool Left Column -->
+            <div class="lg:col-span-6 space-y-6">
+                <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-100">
+                    <h3 class="text-base font-bold text-slate-900 flex items-center gap-1.5 mb-2">
+                        <i data-lucide="calculator" class="text-emerald-600 w-5 h-5"></i> 實時旅程預算估算器 (RMB / HKD)
+                    </h3>
+                    <p class="text-xs text-slate-500 mb-4">預估你在深圳住一晚及各商圈消費的總預算。匯率按 1 RMB ≈ 1.08 HKD 計算。</p>
+
+                    <div class="space-y-4">
+                        <!-- Select Hotel Category -->
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">1. 選擇酒店檔次 (一晚)</label>
+                            <select id="calc-hotel" onchange="calculateBudget()" class="w-full text-sm rounded-lg border-slate-200 bg-slate-50 px-3 py-2 border focus:ring-emerald-500 focus:border-emerald-500">
+                                <option value="460">性價比星級酒店 (~ ¥425 / HKD 460)</option>
+                                <option value="760" selected>德系高端城際酒店 (~ ¥700 / HKD 760)</option>
+                                <option value="650">经典星级香格里拉 (~ ¥600 / HKD 650)</option>
+                            </select>
+                        </div>
+
+                        <!-- Dining Budget -->
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">2. 餐飲消費水平 (每人)</label>
+                            <select id="calc-dining" onchange="calculateBudget()" class="w-full text-sm rounded-lg border-slate-200 bg-slate-50 px-3 py-2 border focus:ring-emerald-500 focus:border-emerald-500">
+                                <option value="200">平價大排檔/茶飲小吃 (約 ¥185 / HKD 200)</option>
+                                <option value="400" selected>精緻烤鴨/和牛/海膽 (約 ¥370 / HKD 400)</option>
+                                <option value="800">奢華饗宴 (約 ¥740 / HKD 800)</option>
+                            </select>
+                        </div>
+
+                        <!-- Shopping Budget -->
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">3. 伴手禮與行街購物 (鮑師傅等)</label>
+                            <select id="calc-shopping" onchange="calculateBudget()" class="w-full text-sm rounded-lg border-slate-200 bg-slate-50 px-3 py-2 border focus:ring-emerald-500 focus:border-emerald-500">
+                                <option value="50">輕度 (約 ¥46 / HKD 50)</option>
+                                <option value="150" selected>中度伴手禮 (約 ¥138 / HKD 150)</option>
+                                <option value="300">重度買買買 (約 ¥277 / HKD 300)</option>
+                            </select>
+                        </div>
+
+                        <!-- Transit Estimator -->
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">4. 行程人數</label>
+                            <div class="flex items-center gap-3">
+                                <button onclick="adjustPeople(-1)" class="w-10 h-10 bg-slate-100 hover:bg-slate-200 rounded-lg font-bold text-slate-700">-</button>
+                                <span id="calc-people" class="text-base font-bold text-slate-900 w-8 text-center">1</span>
+                                <button onclick="adjustPeople(1)" class="w-10 h-10 bg-slate-100 hover:bg-slate-200 rounded-lg font-bold text-slate-700">+</button>
+                                <span class="text-xs text-slate-400">（房費固定，餐飲與購物隨人數疊加）</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Total Output Area -->
+                    <div class="mt-6 bg-emerald-800 text-white rounded-xl p-4 flex justify-between items-center shadow-inner">
+                        <div>
+                            <span class="text-xs text-emerald-200">估計總預算 (港幣)</span>
+                            <div class="text-2xl font-bold" id="total-hkd">HKD 1,310</div>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-xs text-emerald-200">折合人民幣</span>
+                            <div class="text-lg font-semibold" id="total-rmb">¥ 1,213</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Prep Checklist Right Column -->
+            <div class="lg:col-span-6 space-y-6">
+                <!-- HK to SZ Crossing Checklist -->
+                <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-100">
+                    <h3 class="text-base font-bold text-slate-900 flex items-center gap-1.5 mb-3">
+                        <i data-lucide="check-square" class="text-emerald-600 w-5 h-5"></i> 港人出發前必備 Check-list
+                    </h3>
+                    <p class="text-xs text-slate-500 mb-4">明天出發前，請務必逐項勾選確認以下準備：</p>
+
+                    <div class="space-y-2.5">
+                        <label class="flex items-center gap-2.5 p-1 rounded hover:bg-slate-50 cursor-pointer">
+                            <input type="checkbox" class="rounded text-emerald-600 focus:ring-emerald-500 w-4 h-4">
+                            <span class="text-sm text-slate-700">證件：帶齊<strong>香港身份證</strong> + <strong>回鄉證</strong></span>
+                        </label>
+                        <label class="flex items-center gap-2.5 p-1 rounded hover:bg-slate-50 cursor-pointer">
+                            <input type="checkbox" class="rounded text-emerald-600 focus:ring-emerald-500 w-4 h-4">
+                            <span class="text-sm text-slate-700">數據漫遊：確認手機已啟動大灣區日費數據計劃</span>
+                        </label>
+                        <label class="flex items-center gap-2.5 p-1 rounded hover:bg-slate-50 cursor-pointer">
+                            <input type="checkbox" class="rounded text-emerald-600 focus:ring-emerald-500 w-4 h-4">
+                            <span class="text-sm text-slate-700">電子支付：開通 WeChat Pay / Alipay HK 內地跨境支付</span>
+                        </label>
+                        <label class="flex items-center gap-2.5 p-1 rounded hover:bg-slate-50 cursor-pointer">
+                            <input type="checkbox" class="rounded text-emerald-600 focus:ring-emerald-500 w-4 h-4">
+                            <span class="text-sm text-slate-700">美團/大眾點評：手機下載App，方便直接查看商圈餐廳詳情</span>
+                        </label>
+                        <label class="flex items-center gap-2.5 p-1 rounded hover:bg-slate-50 cursor-pointer">
+                            <input type="checkbox" class="rounded text-emerald-600 focus:ring-emerald-500 w-4 h-4">
+                            <span class="text-sm text-slate-700">隨身行李：帶上充電寶(內地租借亦極方便)及雨傘</span>
+                        </label>
+                    </div>
+
+                    <div class="mt-5 p-3 rounded-lg bg-amber-50 border border-amber-100 text-xs text-amber-800 leading-relaxed">
+                        <strong>通關溫馨叮囑：</strong> 週末下午的返港人潮多在17:30至19:30之間。建議明晚提前在領展中心城買好鲍师傅，於下午17:00左右在會展中心搭地鐵直奔口岸，通關速度極快，不會累著。
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Footer -->
+    <footer class="mt-12 border-t border-slate-200 pt-6 text-center text-xs text-slate-400">
+        <p>© 2026 深圳週末休閒雙日遊智能指南 ‧ 專為香港休閒旅客定制</p>
+    </footer>
+</div>
+
+<!-- Core Logic script -->
+<script>
+    // Tab switching mechanism
+    function switchTab(tabId) {
+        // Hide all tabs
+        const tabs = document.querySelectorAll('.tab-content');
+        tabs.forEach(tab => {
+            tab.classList.add('hidden');
+            tab.classList.remove('block');
+        });
+
+        // Show active tab
+        const activeTab = document.getElementById(`tab-${tabId}`);
+        activeTab.classList.remove('hidden');
+        activeTab.classList.add('block');
+
+        // Reset all navigation buttons style
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        tabBtns.forEach(btn => {
+            btn.classList.remove('text-emerald-700', 'bg-emerald-50');
+            btn.classList.add('text-slate-500', 'hover:text-slate-800');
+        });
+
+        // Set active button style
+        const activeBtn = document.getElementById(`btn-tab-${tabId}`);
+        activeBtn.classList.add('text-emerald-700', 'bg-emerald-50');
+        activeBtn.classList.remove('text-slate-500', 'hover:text-slate-800');
+    }
+
+    // Route Switching (A / B)
+    function switchRoute(routeLetter) {
+        const routeAContent = document.getElementById('route-content-a');
+        const routeBContent = document.getElementById('route-content-b');
+
+        const btnA = document.getElementById('btn-route-a');
+        const btnB = document.getElementById('btn-route-b');
+
+        if (routeLetter === 'A') {
+            routeAContent.classList.remove('hidden');
+            routeAContent.classList.add('grid');
+            routeBContent.classList.add('hidden');
+            routeBContent.classList.remove('grid');
+
+            btnA.classList.add('bg-white', 'text-emerald-800', 'shadow-sm');
+            btnA.classList.remove('text-slate-600', 'hover:text-slate-900');
+            btnB.classList.remove('bg-white', 'text-emerald-800', 'shadow-sm');
+            btnB.classList.add('text-slate-600', 'hover:text-slate-900');
+        } else {
+            routeAContent.classList.add('hidden');
+            routeAContent.classList.remove('grid');
+            routeBContent.classList.remove('hidden');
+            routeBContent.classList.add('grid');
+
+            btnB.classList.add('bg-white', 'text-emerald-800', 'shadow-sm');
+            btnB.classList.remove('text-slate-600', 'hover:text-slate-900');
+            btnA.classList.remove('bg-white', 'text-emerald-800', 'shadow-sm');
+            btnA.classList.add('text-slate-600', 'hover:text-slate-900');
+        }
+    }
+
+    // Hotel Filters
+    function filterHotels(port) {
+        const hotelCards = document.querySelectorAll('.hotel-card');
+
+        hotelCards.forEach(card => {
+            const cardPort = card.getAttribute('data-port');
+            if (port === 'all' || cardPort === port) {
+                card.style.display = 'flex';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+
+        // Handle Active button style
+        const filterBtns = document.querySelectorAll('.hotel-filter-btn');
+        filterBtns.forEach(btn => {
+            btn.classList.remove('bg-white', 'text-emerald-800', 'shadow-sm');
+            btn.classList.add('text-slate-600', 'hover:text-slate-900');
+        });
+
+        const activeBtn = document.getElementById(`btn-hotel-${port}`);
+        activeBtn.classList.add('bg-white', 'text-emerald-800', 'shadow-sm');
+        activeBtn.classList.remove('text-slate-600', 'hover:text-slate-900');
+    }
+
+    // Food Tab Switches
+    function switchFoodTab(mallKey) {
+        // Hide all food sections
+        const foodSections = document.querySelectorAll('.food-category-content');
+        foodSections.forEach(section => {
+            section.classList.add('hidden');
+            section.classList.remove('block');
+        });
+
+        // Show active food section
+        const activeSection = document.getElementById(`food-content-${mallKey}`);
+        activeSection.classList.remove('hidden');
+        activeSection.classList.add('block');
+
+        // Style reset
+        const foodTabBtns = document.querySelectorAll('.food-tab-btn');
+        foodTabBtns.forEach(btn => {
+            btn.classList.remove('bg-emerald-800', 'text-white');
+            btn.classList.add('bg-slate-100', 'text-slate-600', 'hover:bg-slate-200');
+        });
+
+        const activeBtn = document.getElementById(`btn-food-${mallKey}`);
+        activeBtn.classList.add('bg-emerald-800', 'text-white');
+        activeBtn.classList.remove('bg-slate-100', 'text-slate-600', 'hover:bg-slate-200');
+    }
+
+    // Persistent Checklist in LocalStorage
+    const listKeys = ['chk-bao', 'chk-ama', 'chk-moly', 'chk-hema', 'chk-blue'];
+
+    function loadChecklistState() {
+        listKeys.forEach(key => {
+            const isChecked = localStorage.getItem(key) === 'true';
+            const checkbox = document.getElementById(key);
+            if (checkbox) {
+                checkbox.checked = isChecked;
+            }
+        });
+    }
+
+    function toggleCheck(key) {
+        const checkbox = document.getElementById(key);
+        if (checkbox) {
+            localStorage.setItem(key, checkbox.checked);
+        }
+    }
+
+    // Budget Calculator State
+    let numPeople = 1;
+
+    function adjustPeople(direction) {
+        numPeople += direction;
+        if (numPeople < 1) numPeople = 1;
+        if (numPeople > 10) numPeople = 10;
+
+        document.getElementById('calc-people').innerText = numPeople;
+        calculateBudget();
+    }
+
+    function calculateBudget() {
+        const hotelCost = parseFloat(document.getElementById('calc-hotel').value);
+        const diningCost = parseFloat(document.getElementById('calc-dining').value);
+        const shoppingCost = parseFloat(document.getElementById('calc-shopping').value);
+
+        // One hotel room is assumed shared by up to 2 people.
+        // For calculation simplicity, we charge 1 hotel cost flat rate, but scale dining and shopping by people count.
+        const totalHKD = hotelCost + (diningCost * numPeople) + (shoppingCost * numPeople);
+        const totalRMB = Math.round(totalHKD / 1.08);
+
+        document.getElementById('total-hkd').innerText = `HKD ${totalHKD.toLocaleString()}`;
+        document.getElementById('total-rmb').innerText = `¥ ${totalRMB.toLocaleString()}`;
+    }
+
+    // Window Onload initialization
+    window.onload = function () {
+        // Create icons
+        lucide.createIcons();
+        // Load persistency state
+        loadChecklistState();
+        // Calculate initial budget
+        calculateBudget();
+    }
+</script>
+</body>
+</html>
